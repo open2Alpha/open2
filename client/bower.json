@@ -1,0 +1,21 @@
+{
+  "name": "open2",
+  "homepage": "https://github.com/open2Alpha/open2",
+  "authors": [
+    "prexsa <prexgit@gmail.com>"
+  ],
+  "description": "open2",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "open2"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
