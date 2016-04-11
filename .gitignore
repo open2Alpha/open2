@@ -1,5 +1,9 @@
 ### bower ###
-bower_components
+client/bower_components
 
 ### node ###
-node_modules
+server/node_modules
+
+
+### DATABASE ###
+server/db.js
