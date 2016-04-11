@@ -1,9 +1,58 @@
-<!DOCTYPE html>
-<html>
+<html lang="en" >
 <head>
-	<title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+  <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+
+  <link rel="stylesheet" href="style/style.css">
+
 </head>
 <body>
+  <main ui-view></main>
+  <!--
+    Your HTML content here
+  -->
+<!-- <div class="login-form">
+  <h1>Open2</h1>
+    <div class="form-group" ng-controller = "loginCtrl">
+      <form action="/" id="myLogin">
+      <md-input-container md-no-float="" class="md-block">
+        <input class="login-form" type="text" name="username" ng-model="username"placeholder="Username">
+      </md-input-container>
+      <md-input-container md-no-float="" class="md-block">
+        <input type="password" name="password"ng-model="password" placeholder="Password">
+      </md-input-container>
+
+
+        <md-button class="md-fab"  ng-click="submit()" aria-label="Eat cake">
+        </md-icon>
+        </md-button>
+    </div>
+  </form>
+<div>
+ -->
+
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  <script src="bower_components/angular-ui-router//angular-ui-router.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+      <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Your application bootstrap  -->
+
 
 </body>
 </html>
+
+<!--
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+-->
