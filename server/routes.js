@@ -1,5 +1,5 @@
 var express = require('express')
-var router = express.Router()
+var router = express.Router();
 var db = require('../db.js')
 
 
@@ -24,4 +24,4 @@ router.get('/dashboard/:id', function (req, res) {
 	})
 })
 
-module.exports = router
+module.exports = router;
