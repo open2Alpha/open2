@@ -1,9 +1,10 @@
-var app = angular.module('myApp', ['ngMaterial', 'ui.router']);
+var app = angular.module('myApp', ['ngMaterial']);
 
 // app.config(function($routeProvider) {
 //   $routeProvider
 //   .when("/", {
-//     templateUrl: 'index.html'
+//     templateUrl: 'index.html',
+//     controller: loginCtrl
 //   })
 //   .when('/dashboard', {
 //     templateUrl: 'dashboard.html'
@@ -12,32 +13,69 @@ var app = angular.module('myApp', ['ngMaterial', 'ui.router']);
 //     redirectTo: '/'
 //   });
 // });
-app.config( function($scope, $urlRouterProvider){
-  $urlRouterProvider.otherwise('/');
 
-  $stateProvider
-    .state('login',{
-      url: '/login',
-      templateUrl: 'index.html',
-      // controller: 'loginCtrl'
-    })
-    .state('dashboard', {
-      url: '/dashboard',
-      templateUrl: 'dashboard.html'
-    })
-});
+app.controller('loginCtrl', function($scope, Auth) {
 
-
-
-
-
-app.controller('loginCtrl', function($scope) {
   $scope.submit = function() {
-    var uname = $scope.username;
-    var pword = $scope.password;
-    console.log(uname, pword)
-    if($scope.username == 'admin' && $scope.password == 'admin') {
-      alert("Congrats you are ADMIn!");
-    }
-  };
+    var user = {
+      username: $scope.username,
+      password: $scope.password
+    };
+    console.log(user);
+    Auth.login(user);
+ };
+ 
 });
+
+app.factory('Auth', function($http, $location) {
+
+  var login = function(user) {
+    return $http({
+      method: 'GET',
+      url: 'http://localhost:8080',
+      data: user
+    })
+    .then(function(resp){
+      $location.path('/dashboard');
+    })
+  };
+
+  return {
+    login: login
+   };
+
+ });
+
+// var app = angular.module('myApp', ['ngMaterial', 'ui.router']);
+
+// // app.config(function($routeProvider) {
+// //   $routeProvider
+// //   .when("/", {
+// //     templateUrl: 'index.html'
+// //   })
+// //   .when('/dashboard', {
+// //     templateUrl: 'dashboard.html'
+// //   })
+// //   .otherwise({
+// //     redirectTo: '/'
+// //   });
+// // // });
+// // app.config( function($scope, $urlRouterProvider){
+// //   $urlRouterProvider.otherwise('/');
+
+// //   $stateProvider
+// //     .state('login',{
+// //       url: '/login',
+// //       templateUrl: 'index.html',
+// //       // controller: 'loginCtrl'
+// //     })
+// //     .state('dashboard', {
+// //       url: '/dashboard',
+// //       templateUrl: 'dashboard.html'
+// //     })
+// // });
+
+
+
+
+

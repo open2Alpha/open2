@@ -8,12 +8,9 @@
   <link rel="stylesheet" href="style/style.css">
 
 </head>
-<body>
-  <main ui-view></main>
-  <!--
-    Your HTML content here
-  -->
-<!-- <div class="login-form">
+<body ng-app="myApp" ng-cloak>
+ 
+<div class="login-form">
   <h1>Open2</h1>
     <div class="form-group" ng-controller = "loginCtrl">
       <form action="/" id="myLogin">
@@ -23,7 +20,7 @@
       <md-input-container md-no-float="" class="md-block">
         <input type="password" name="password"ng-model="password" placeholder="Password">
       </md-input-container>
-
+        <!--   <button type="button" class="md-mini"> Login </button> -->
 
         <md-button class="md-fab"  ng-click="submit()" aria-label="Eat cake">
         </md-icon>
@@ -31,12 +28,11 @@
     </div>
   </form>
 <div>
- -->
+
 
 
   <!-- Angular Material requires Angular.js Libraries -->
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-  <script src="bower_components/angular-ui-router//angular-ui-router.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
