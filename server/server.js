@@ -28,6 +28,7 @@ app.post('/', function(request, response){
 			res.status(404).json({success: false});
 		}else{
 			console.log(rows);
+			response.send('/dashboard');
 		}
 	});
 
