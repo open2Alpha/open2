@@ -22,14 +22,14 @@ app.post('/', function(request, response){
 	var username = request.body.username;
 	var password = request.body.password;
 
-	// db.query('SELECT `password` FROM Users WHERE `password` = ?;', [password], function (err, rows) {
-	// 	if(err){
-	// 		console.error(err);
-	// 		res.status(404).json({success: false});
-	// 	}else{
-	// 		res.json(rows);
-	// 	}
-	// });
+	db.query('SELECT `password` FROM Users WHERE `password` = ?;', [password], function (err, rows) {
+		if(err){
+			console.error(err);
+			res.status(404).json({success: false});
+		}else{
+			console.log(rows);
+		}
+	});
 
 });
 

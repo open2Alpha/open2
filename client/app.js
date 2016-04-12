@@ -31,7 +31,7 @@ app.factory('Auth', function($http, $location) {
 
   var login = function(user) {
     return $http({
-      method: 'GET',
+      method: 'POST',
       url: 'http://localhost:8080',
       data: user
     })
