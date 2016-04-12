@@ -1,21 +1,6 @@
-var app = angular.module('myApp', ['ngMaterial']);
-
-// app.config(function($routeProvider) {
-//   $routeProvider
-//   .when("/", {
-//     templateUrl: 'index.html',
-//     controller: loginCtrl
-//   })
-//   .when('/dashboard', {
-//     templateUrl: 'dashboard.html'
-//   })
-//   .otherwise({
-//     redirectTo: '/'
-//   });
-// });
+var app = angular.module('myApp', ['ngMaterial', 'ngRoute']);
 
 app.controller('loginCtrl', function($scope, Auth) {
-
   $scope.submit = function() {
     var user = {
       username: $scope.username,
@@ -36,7 +21,12 @@ app.factory('Auth', function($http, $location) {
       data: user
     })
     .then(function(resp){
+      console.log("I am your dashboard", resp)
       $location.path('/dashboard');
+    })
+    .catch(function(err){
+      $location.path('/');
+      console.log(err);
     })
   };
 
@@ -46,34 +36,19 @@ app.factory('Auth', function($http, $location) {
 
  });
 
-// var app = angular.module('myApp', ['ngMaterial', 'ui.router']);
-
-// // app.config(function($routeProvider) {
-// //   $routeProvider
-// //   .when("/", {
-// //     templateUrl: 'index.html'
-// //   })
-// //   .when('/dashboard', {
-// //     templateUrl: 'dashboard.html'
-// //   })
-// //   .otherwise({
-// //     redirectTo: '/'
-// //   });
-// // // });
-// // app.config( function($scope, $urlRouterProvider){
-// //   $urlRouterProvider.otherwise('/');
-
-// //   $stateProvider
-// //     .state('login',{
-// //       url: '/login',
-// //       templateUrl: 'index.html',
-// //       // controller: 'loginCtrl'
-// //     })
-// //     .state('dashboard', {
-// //       url: '/dashboard',
-// //       templateUrl: 'dashboard.html'
-// //     })
-// // });
+app.config(function($routeProvider) {
+  $routeProvider
+  .when("/", {
+    templateUrl: 'login.html',
+    controller: 'loginCtrl'
+  })
+  .when('/dashboard', {
+    templateUrl: 'dashboard.html'
+  })
+  .otherwise({
+    redirectTo: '/'
+  })
+});
 
 
 
