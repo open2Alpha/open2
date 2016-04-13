@@ -15,10 +15,9 @@
     "tests"
   ],
   "dependencies": {
-
     "angular": "^1.5.3",
     "angular-material": "^1.0.7",
-    "angular-ui-router": "^0.2.18"
-
+    "angular-ui-router": "^0.2.18",
+    "angular-route": "^1.5.3"
   }
 }

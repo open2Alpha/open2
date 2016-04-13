@@ -37,22 +37,25 @@ app.post('/', function(request, response){
 });
 
 
-app.get('/dashboard', function(req,res){
-  twilio.sendMessage({
-    to: '+18185227459',
-    from: '+12678634314',
-    body: 'Hey Im Available!'
-  },
-   function(err, text){
-    if (err) {
-      console.log('Error: ', err);
-      throw err;
-    }
-    res.send(text);
-    console.log(" sent! text: ", text);
-  });
-});
+// app.get('/form', function(req,res){
+//   twilio.sendMessage({
+//     to: '+18185227459',
+//     from: '+12678634314',
+//     body: 'Hey Im Available!'
+//   },
+//    function(err, text){
+//     if (err) {
+//       console.log('Error: ', err);
+//       throw err;
+//     }
+//     res.send(text);
+//     console.log(" sent! text: ", text);
+//   });
+// });
 
+app.get('/dashboard', function(request, response) {
+  response.send([{'name': 'Prex is eating', 'time': '12:00-14:00'}, {'name': 'Dain is coding', 'time': '14:00-20:00'}]);
+});
 
 
 
