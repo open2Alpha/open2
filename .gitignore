@@ -6,4 +6,7 @@ server/node_modules
 
 
 ### DATABASE ###
-server/db.js
+server/dbconfig.js
+
+### assets ###
+client/assets
