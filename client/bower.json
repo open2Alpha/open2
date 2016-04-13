@@ -1,15 +1,11 @@
 {
-  "name": "open2",
-  "homepage": "https://github.com/open2Alpha/open2",
+  "name": "client",
+  "homepage": "https://github.com/eshinx1/twitter-mvp-review",
   "authors": [
-    "prexsa <prexgit@gmail.com>"
+    "eshinx1 <eshinx1@gmail.com>"
   ],
-  "description": "open2",
+  "description": "",
   "main": "",
-  "moduleType": [],
-  "keywords": [
-    "open2"
-  ],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -17,5 +13,12 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+
+    "angular": "^1.5.3",
+    "angular-material": "^1.0.7",
+    "angular-ui-router": "^0.2.18"
+
+  }
 }
