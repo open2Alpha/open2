@@ -9,8 +9,14 @@ app.controller('loginCtrl', function($scope, Auth) {
     console.log(user);
     Auth.login(user);
  };
- 
+
 });
+
+app.controller('clickButton', function($scope, click){
+  $scope.click = function(){
+    click.notify({sent: "data"});
+  }
+})
 
 app.factory('Auth', function($http, $location) {
 
@@ -36,6 +42,29 @@ app.factory('Auth', function($http, $location) {
 
  });
 
+
+ app.factory('click', function($http) {
+
+    var notify = function(sendText){
+      return $http({
+        method: 'POST',
+        url: 'http://localhost:8080/dashboard',
+        data: sendText
+      })
+      .then(function(data){
+        console.log("Sent the Messages", data);
+      })
+      .catch(function(err){
+        $location.path('/');
+        console.log(err);
+      })
+    };
+    return {
+      notify: notify
+     };
+ });
+
+
 app.config(function($routeProvider) {
   $routeProvider
   .when("/", {
@@ -49,8 +78,3 @@ app.config(function($routeProvider) {
     redirectTo: '/'
   })
 });
-
-
-
-
-
