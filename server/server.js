@@ -3,6 +3,8 @@ var bodyParser = require('body-parser');
 var db = require('./db.js');
 var cors = require('cors');
 //var router = express.Router();
+var twilio = require('twilio')('AC40691c0816f7dd360b043b23331f4f43','89f0d01b69bb6bcc473724b5b232b6f4');
+
 var app = express();
 
 app.use(cors());
@@ -26,12 +28,29 @@ app.post('/', function(request, response){
 		if(err){
 			console.error(err);
 			res.status(404).json({success: false});
-		}else{
+		} else {
 			console.log(rows);
 			response.send('/dashboard');
 		}
 	});
 
+});
+
+
+app.get('/dashboard', function(req,res){
+  twilio.sendMessage({
+    to: '+18185227459',
+    from: '+12678634314',
+    body: 'Hey Im Available!'
+  },
+   function(err, text){
+    if (err) {
+      console.log('Error: ', err);
+      throw err;
+    }
+    res.send(text);
+    console.log(" sent! text: ", text);
+  });
 });
 
 
