@@ -1,4 +1,4 @@
-<!-- <div ng-controller='dashboardCtrl'>                     
+<!-- <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
     <ul>
       <li ng-repeat="event in events.list"> {{ event.name}} {{event.time}}</li>
@@ -54,9 +54,30 @@
    </md-sidenav>
    <md-content flex layout-padding>
      <div layout="column" layout-fill layout-align="top center">
+<!-- button start -->
+<div ng-controller="AppCtrl" class="md-padding" id="popupContainer" ng-cloak>
+  <p class="inset">
+    Open a dialog over the app's content. Press escape or click outside to close the dialog and
+    send focus back to the triggering button.
+  </p>
+  <div class="dialog-demo-content" layout="row" layout-wrap layout-margin layout-align="center">
 
-     <button >NEW EVENT</button>
+    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
+      Custom Dialog
+    </md-button>
 
+  </div>
+  <p class="footer">Note: The <b>Confirm</b> dialog does not use <code>$mdDialog.clickOutsideToClose(true)</code>.</p>
+  <div hide-gt-sm layout="row" layout-align="center center" flex>
+      <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Force Custom Dialog Fullscreen</md-checkbox>
+    </div>
+  <div ng-if="status" id="status">
+    <b layout="row" layout-align="center center" class="md-padding">
+      {{status}}
+    </b>
+  </div>
+</div>
+<!-- button end -->
          <!-- notification Box -->
                            <div ng-controller="SubheaderAppCtrl" layout="column" flex layout-fill ng-cloak>
                  <md-toolbar md-scroll-shrink>
@@ -68,7 +89,7 @@
                      <md-list layout-padding>
                        <md-list-item class="md-3-line" ng-repeat="message in messages">
                            <!-- <img ng-src="{{message.face}}" class="md-avatar" alt="{{message.who}}"> -->
-                    <div ng-controller='dashboardCtrl'>                     
+                    <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
     <ul>
       <li ng-repeat="event in events.list"> {{ event.name}} {{event.time}}</li>
