@@ -1,1 +1,59 @@
-<button ng-controller='clickButton'> Ping my friends </button>
+<md-dialog aria-label="Mango (Fruit)"  ng-cloak>
+<div ng-controller="AppCtrl">
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>What do you want to do?</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h2>Let me see...</h2>
+        <!-- time -->
+        <div ng-controller="AppCtrl" style='padding: 20px;' ng-cloak>
+          <md-content>
+            <h4>Standard date-picker</h4>
+            <md-datepicker ng-model="myDate" md-placeholder="Enter date"></md-datepicker>
+          </md-content>
+        </div>
+        <!-- time end -->
+        <!-- This is our input data -->
+        <div ng-controller="AppCtrl" layout="column" layout-padding ng-cloak>
+          <br/>
+          <md-content class="md-no-momentum">
+            <md-input-container class="md-icon-float md-block">
+              <!-- Use floating label instead of placeholder -->
+              <label>What to do?</label>
+              <md-icon md-svg-src="img/icons/ic_person_24px.svg" class="name"></md-icon>
+              <input ng-model="user.activity" type="text">
+            </md-input-container>
+            <md-input-container md-no-float class="md-block">
+              <md-icon md-svg-src="img/icons/ic_phone_24px.svg"></md-icon>
+              <input ng-model="user.notes" type="text" placeholder="Bring your swim trunks!">
+            </md-input-container>
+
+          </md-content>
+        </div>
+        <!-- This is end of input data -->
+        <p>
+          Lets see if anyone is Open2...
+        </p>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+
+      <span flex></span>
+      <md-button ng-click="answer('Lets not...')">
+       Cancel
+      </md-button>
+      <md-button ng-click="answer('useful')" style="margin-right:20px;">
+        OKAY!
+      </md-button>
+    </md-dialog-actions>
+  </form>
+  </div>
+</md-dialog>
