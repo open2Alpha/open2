@@ -24,18 +24,66 @@ app.post('/', function(request, response){
 	var username = request.body.username;
 	var password = request.body.password;
 
-	db.query('SELECT `password` FROM Users WHERE `password` = ?;', [password], function (err, rows) {
-		if(err){
-			console.error(err);
-			res.status(404).json({success: false});
+	db.query('SELECT * FROM Users WHERE `username` = ?;', [username], function(err, rows) {
+		console.log(rows);
+		if (err) {
+			throw err;
 		} else {
-			console.log(rows);
-			response.send('/dashboard');
+			if(password !== rows[0].password){
+				console.log("Incorrect password");
+			}else{
+				console.log("Success");
+				response.send('/dashboard');
+			}
 		}
-	});
+	})
 
 });
 
+app.post('/dashboard', function(request, response) {
+	 var event = request.body.event;
+   var timestamp = request.body.time;
+
+	var events = {eventname: event, timestamp: timestamp};
+	db.query('INSERT INTO Events SET ?', events, function(err, results){
+		if (err) {
+	        console.log(err);
+	        response.sendStatus(500);
+	    }else{
+	      	console.log("Event added");
+	      	console.log("return from database, inside server", results);
+	      	//response.send(results);
+	      	// results.insertId, is eventId
+	      	var eventId = results.insertId;
+	      	//addUserEvents(2, eventId, "yes");
+
+	      	db.query('SELECT * FROM Events WHERE `id` = ?;', [eventId], function(err, rows){
+	      		if(err){
+	      			throw err;
+	      		}else{
+	      			response.send(rows);
+	      		}
+	      	})
+	    }
+	});
+
+
+
+})
+
+
+var addUserEvents = function(creator, eventId, status){
+	var userEvents = {user_id: creator, event_id: eventId, status: status};
+	db.query('INSERT INTO UserEvents SET ?', userEvents, function(err, results){
+		if (err) {
+		    console.log(err);
+		    response.sendStatus(500);
+		}else{
+			console.log("Add User Events Join Table");
+			console.log("Add User Events", results);
+		}
+	});
+}
 
 // app.get('/form', function(req,res){
 //   twilio.sendMessage({
@@ -54,7 +102,13 @@ app.post('/', function(request, response){
 // });
 
 app.get('/dashboard', function(request, response) {
-  response.send([{'name': 'Prex is eating', 'time': '12:00-14:00'}, {'name': 'Dain is coding', 'time': '14:00-20:00'}]);
+  db.query('SELECT * FROM Events', function(err, rows){
+		if(err){
+			throw err;
+		}else{
+			response.send(rows);
+		}
+	})
 });
 
 
