@@ -1,129 +1,63 @@
-<!-- <div ng-controller='dashboardCtrl'>
-  <div ng-if='events.fetch'>
-    <ul>
-      <li ng-repeat="event in events.list"> {{ event.name}} {{event.time}}</li>
-    </ul>
-  </div>
-</div> -->
-
+<!--- nav bar start -->
 <div ng-controller="AppCtrl" layout="column" style="height:70px;" ng-cloak>
-<!-- NAV BAR -->
-
-<!--
- <md-content>
--->
-   <md-toolbar>
-     <div class="md-toolbar-tools">
-       <h2>
-         <span>Toolbar with Standard Buttons</span>
-       </h2>
-       <span flex></span>
-       <md-button class="md-raised" aria-label="Learn More">
-         Learn More
-       </md-button>
-       <md-button class="md-fab md-mini" aria-label="Favorite">
-         <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
-       </md-button>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2> Open2</h2>
+      <span flex></span>
+      <md-button class="md-fab md-mini" aria-label="Favorite"> </md-button>
      </div>
    </md-toolbar>
-<!--
- </md-content> -->
 </div>
+<!-- nav bar end -->
 
-<!-- NAV BAR END -->
-
+    <!-- friends list -->
  <section layout="row" flex>
-   <md-sidenav
-       class="md-sidenav-left"
-       md-component-id="left"
-       md-is-locked-open="$mdMedia('gt-md')"
-       md-disable-backdrop
-       md-whiteframe="4">
+   <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-disable-backdrop md-whiteframe="4">
      <md-toolbar class="md-theme-indigo">
-       <h1 class="md-toolbar-tools">Sidenav Left</h1>
+       <h1 class="md-toolbar-tools">my friends</h1>
      </md-toolbar>
      <md-content layout-padding ng-controller="LeftCtrl">
-       <md-button ng-click="close()" class="md-primary" hide-gt-md>
-         Close Sidenav Left
-       </md-button>
-       <p hide-md show-gt-md>
-         This sidenav is locked open on your device. To go back to the default behavior,
-         narrow your display.
-       </p>
+       <md-button ng-click="close()" class="md-primary" hide-gt-md> Close Sidenav Left </md-button>
+       <p hide-md show-gt-md> Friends (feature not finished yet) </p>
      </md-content>
    </md-sidenav>
+
+
    <md-content flex layout-padding>
      <div layout="column" layout-fill layout-align="top center">
+
 <!-- button start -->
-<div ng-controller="AppCtrl" class="md-padding" id="popupContainer" ng-cloak>
-  <p class="inset">
-    Open a dialog over the app's content. Press escape or click outside to close the dialog and
-    send focus back to the triggering button.
-  </p>
+<div ng-controller="dashboardCtrl" class="md-padding" id="popupContainer" ng-cloak>
+  <p class="inset"> Ask my friends if they are open 2? </p>
+
   <div class="dialog-demo-content" layout="row" layout-wrap layout-margin layout-align="center">
 
-    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
-      Custom Dialog
-    </md-button>
+    <!-- event button -->
+    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)"> new event</md-button>
+  </div>
 
-  </div>
-  <p class="footer">Note: The <b>Confirm</b> dialog does not use <code>$mdDialog.clickOutsideToClose(true)</code>.</p>
-  <div hide-gt-sm layout="row" layout-align="center center" flex>
-      <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Force Custom Dialog Fullscreen</md-checkbox>
-    </div>
-  <div ng-if="status" id="status">
-    <b layout="row" layout-align="center center" class="md-padding">
-      {{status}}
-    </b>
-  </div>
 </div>
-<!-- button end -->
-         <!-- notification Box -->
-                           <div ng-controller="SubheaderAppCtrl" layout="column" flex layout-fill ng-cloak>
-                 <md-toolbar md-scroll-shrink>
-                   <div class="md-toolbar-tools">My Messages</div>
-                 </md-toolbar>
-                 <md-content style="height: 200px;" md-theme="altTheme">
-                   <section>
-                     <md-subheader class="md-primary">Unread Messages</md-subheader>
-                     <md-list layout-padding>
-                       <md-list-item class="md-3-line" ng-repeat="message in messages">
-                           <!-- <img ng-src="{{message.face}}" class="md-avatar" alt="{{message.who}}"> -->
-                    <div ng-controller='dashboardCtrl'>
+
+     <!-- notification Box -->
+<div ng-controller="SubheaderAppCtrl" layout="column" flex layout-fill ng-cloak>
+  <md-toolbar>
+    <div class="md-toolbar-tools">my events</div>
+  </md-toolbar>
+  <md-content md-theme="altTheme">
+
+  <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
     <ul>
-      <li ng-repeat="event in events.list"> {{ event.name}} {{event.time}}</li>
+      <li ng-repeat="event in events.list" style = "list-style: none"> <span style = "font-weight: bold"> {{ event.eventname}} </span><span> {{event.timestamp}} </span></li>
     </ul>
   </div>
+  </div>
+  </md-content>
 </div>
-                       </md-list-item>
-                     </md-list>
-                   </section>
-
-                 </md-content>
-               </div>
-
-             <!-- Notification END -->
+<!-- Notification END -->
 
      </div>
-     <div flex></div>
+
    </md-content>
-   <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
-     <md-toolbar class="md-theme-light">
-       <h1 class="md-toolbar-tools">Sidenav Right</h1>
-     </md-toolbar>
-     <md-content ng-controller="RightCtrl" layout-padding>
-       <form>
-         <md-input-container>
-           <label for="testInput">Test input</label>
-           <input type="text" id="testInput"
-                  ng-model="data" md-autofocus>
-         </md-input-container>
-       </form>
-       <md-button ng-click="close()" class="md-primary">
-         Close Sidenav Right
-       </md-button>
-     </md-content>
-   </md-sidenav>
+
  </section>
-</div>
