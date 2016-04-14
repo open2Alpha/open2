@@ -48,7 +48,7 @@
   <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
     <ul>
-      <li ng-repeat="event in events.list" style = "list-style: none"> <span style = "font-weight: bold"> {{ event.eventname}} </span><span> {{event.timestamp}} </span></li>
+      <li ng-repeat="event in events.list | reverse" style = "list-style: none"> <span style = "font-weight: bold"> {{ event.eventname}} </span><span> {{event.timestamp}} </span></li>
     </ul>
   </div>
   </div>

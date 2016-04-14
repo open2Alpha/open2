@@ -28,7 +28,7 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
   });
 
     // dashboard controller
-app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia) {
+app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route) {
   $scope.events = {};
   Services.uploadDashboard()
   .then(function(data){
@@ -77,9 +77,15 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia) {
     .then(function(respData){
        console.log('i got this back from server/database', respData);
     })
-
+    $route.reload();
   }
 
+});
+
+app.filter('reverse', function() {
+  return function(items) {
+    return items.slice().reverse();
+  };
 });
 
 
