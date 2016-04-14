@@ -1,45 +1,94 @@
 
 var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
 
-app.config(function($routeProvider) {
-  $routeProvider
-  .when("/", {
-    templateUrl: 'login.html',
-    controller: 'loginCtrl'
-  })
-  .when('/dashboard', {
-    templateUrl: 'dashboard.html'
-  })
-  .otherwise({
-    redirectTo: '/'
-  })
-});
+    //route config
+  app.config(function($routeProvider) {
+    $routeProvider
+    .when("/", {
+      templateUrl: 'login.html',
+      controller: 'loginCtrl'
+    })
+    .when('/dashboard', {
+      templateUrl: 'dashboard.html'
+    })
+    .otherwise({
+      redirectTo: '/'
+    })
+  });
 
-app.controller('loginCtrl', function($scope, Services) {
-  $scope.submit = function() {
-    var user = {
-      username: $scope.username,
-      password: $scope.password
+    /// login controller
+  app.controller('loginCtrl', function($scope, Services) {
+    $scope.submit = function() {
+      var user = {
+        username: $scope.username,
+        password: $scope.password
+      };
+    Services.login(user);
     };
-  Services.login(user);
-  };
-});
+  });
 
-app.controller('dashboardCtrl', function($scope, Services) {
+    // dashboard controller
+app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia) {
   $scope.events = {};
   Services.uploadDashboard()
   .then(function(data){
-    console.log('I am dashboard data, I am already in your controllerr', data.data)
+    console.log('I am dashboard data, I am already in your controllerr', data)
     $scope.events.fetch = true;
-    $scope.events.list = data.data;
+    $scope.events.list = data;
   });
+
+  //this is our pop up dialog box
+
+  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+
+  $scope.showAdvanced = function(ev) {
+    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'inviteForm.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose:true,
+      fullscreen: useFullScreen
+    })
+
+    $scope.$watch(function() {
+      return $mdMedia('xs') || $mdMedia('sm');
+    }, function(wantsFullScreen) {
+      $scope.customFullscreen = (wantsFullScreen === true);
+    });
+  };
+  //this the end of our pop up dialog box.
+
+  $scope.time = {
+       value: new Date(1970, 0, 1, 14, 57, 0)
+     };
+    //end of our time selector
+
+
+  $scope.click = function() {
+    var eventInfo = {
+      'event' : $scope.user.activity,
+      'time' : $scope.time.value
+    }
+    console.log(eventInfo);
+    // console.log($scope.user.activity);
+    Services.eventsPost(eventInfo)
+    .then(function(respData){
+       console.log('i got this back from server/database', respData);
+    })
+
+  }
+
 });
 
-app.controller('clickButton', function($scope, click){
-  $scope.click = function(){
-    click.notify({sent: "data"});
-  }
-})
+
+    // this if for Twillio
+// app.controller('clickButton', function($scope, click){
+//   $scope.click = function(){
+//     click.notify({sent: "data"});
+//   }
+// })
 
 app.factory('Services', function($http, $location) {
   var login = function(user) {
@@ -55,7 +104,7 @@ app.factory('Services', function($http, $location) {
       $location.path('/');
       console.log(err);
     })
-};
+  };
 
 var uploadDashboard = function() {
   return $http({
@@ -63,21 +112,14 @@ var uploadDashboard = function() {
     url: 'http://localhost:8080/dashboard',
   })
   .then(function(resp){
-    console.log(resp);
-    return resp;
+    console.log('inside uploadDashboard function', resp.data);
+
+    return resp.data;
+
   });
 };
-
-return {
-  login: login,
-  uploadDashboard: uploadDashboard
-};
-
-});
-
-
-app.factory('click', function($http) {
-  var notify = function(sendText){
+ //// Twillio notification
+ var notify = function(sendText){
     return $http({
       method: 'POST',
       url: 'http://localhost:8080/dashboard',
@@ -91,31 +133,54 @@ app.factory('click', function($http) {
       console.log(err);
     })
   };
-  return {
-    notify: notify
-  };
- });
 
+   var eventsPost = function(eventInfo) {
 
-app.config(function($routeProvider) {
-  $routeProvider
-  .when("/", {
-    templateUrl: 'login.html',
-    controller: 'loginCtrl'
-  })
-  .when('/dashboard', {
-    templateUrl: 'dashboard.html'
-  })
-   .otherwise({
-    redirectTo: '/'
-  })
+      return $http({
+        method: 'POST',
+        url: 'http://localhost:8080/dashboard',
+        data: eventInfo
+
+      })
+
+   }
+
+return {
+  login: login,
+  uploadDashboard: uploadDashboard,
+  notify: notify,
+  eventsPost: eventsPost
+};
+
 });
 
 
-//angular materials controllsre
+// app.factory('click', function($http) {
+//   var notify = function(sendText){
+//     return $http({
+//       method: 'POST',
+//       url: 'http://localhost:8080/dashboard',
+//       data: sendText
+//     })
+//     .then(function(data){
+//       console.log("Sent the Messages", data);
+//     })
+//     .catch(function(err){
+//       $location.path('/');
+//       console.log(err);
+//     })
+//   };
+//   return {
+//     notify: notify
+//   };
+//  });
 
 
+
+
+//angular materials controllers
 //SIDE NAV
+
  app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
    $scope.toggleLeft = buildDelayedToggler('left');
    $scope.toggleRight = buildToggler('right');
@@ -182,7 +247,9 @@ app.config(function($routeProvider) {
 app.config(function($mdThemingProvider) {
  $mdThemingProvider.theme('altTheme')
    .primaryPalette('purple');
-})
+});
+
+
 app.controller('SubheaderAppCtrl', function($scope) {
    $scope.messages = [
      {
@@ -197,37 +264,6 @@ app.controller('SubheaderAppCtrl', function($scope) {
 
 
 
-//THIS WILL BE GIVEN TO ANI
-//this is a dialog box for picking an event
-
-
-app.controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
-  $scope.status = '  ';
-  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-
-  $scope.showAdvanced = function(ev) {
-    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-    $mdDialog.show({
-      controller: DialogController,
-      templateUrl: 'inviteform.html',
-      parent: angular.element(document.body),
-      targetEvent: ev,
-      clickOutsideToClose:true,
-      fullscreen: useFullScreen
-    })
-    .then(function(answer) {
-      $scope.status = 'You said the information was "' + answer + '".';
-    }, function() {
-      $scope.status = 'You cancelled the dialog.';
-    });
-    $scope.$watch(function() {
-      return $mdMedia('xs') || $mdMedia('sm');
-    }, function(wantsFullScreen) {
-      $scope.customFullscreen = (wantsFullScreen === true);
-    });
-  };
-
-});
 function DialogController($scope, $mdDialog) {
   $scope.hide = function() {
     $mdDialog.hide();
@@ -240,27 +276,8 @@ function DialogController($scope, $mdDialog) {
   };
 }
 
-angular.module('datepickerBasicUsage',
-    ['ngMaterial', 'ngMessages']).controller('AppCtrl', function($scope) {
-  $scope.myDate = new Date();
-  $scope.minDate = new Date(
-      $scope.myDate.getFullYear(),
-      $scope.myDate.getMonth() - 2,
-      $scope.myDate.getDate());
-  $scope.maxDate = new Date(
-      $scope.myDate.getFullYear(),
-      $scope.myDate.getMonth() + 2,
-      $scope.myDate.getDate());
-  $scope.onlyWeekendsPredicate = function(date) {
-    var day = date.getDay();
-    return day === 0 || day === 6;
-  }
-});
+ // angular.module('timeExample', [])
+ //   .controller('DateController', ['$scope', function($scope) {
 
-angular.module('AppCtrl', ['ngMaterial', 'ngMessages'])
-  .controller('DemoCtrl', function($scope) {
-    $scope.user = {
-      activity: '',
-      notes: '',
-    };
-  });
+ //   }]);
+
