@@ -42,9 +42,18 @@ app.post('/', function(request, response){
 
 app.post('/dashboard', function(request, response) {
 	 var event = request.body.event;
-   var timestamp = request.body.time;
-
+     var timestamp = request.body.time;
+     console.log(event);
 	var events = {eventname: event, timestamp: timestamp};
+
+
+   twilio.sendMessage({
+      to: '+18185227459',
+      from: '+12678634314',
+      body: 'I am available to ' + event + " at " + timestamp
+    }); 
+
+
 	db.query('INSERT INTO Events SET ?', events, function(err, results){
 		if (err) {
 	        console.log(err);
