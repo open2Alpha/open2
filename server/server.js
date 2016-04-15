@@ -18,7 +18,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../client'));
 // app.use('/api/', router);
 
+app.post('/signup', function(request, response){
 
+    var username = request.body.username;
+    var password = request.body.password;
+    //var mobile = request.body.mobile;
+
+    users = {username: username, password: password};
+
+    db.query('INSERT INTO Users SET ?', users, function(err, results){
+        if(err){
+            response.sendStatus(500);
+        }else{
+        	response.send('/login');
+            console.log("New user added to database");
+        }
+    })
+})
 
 app.post('/', function(request, response){
 	var username = request.body.username;
@@ -51,7 +67,7 @@ app.post('/dashboard', function(request, response) {
       to: '+18185227459',
       from: '+12678634314',
       body: 'I am available to ' + event + " at " + timestamp
-    }); 
+    });
 
 
 	db.query('INSERT INTO Events SET ?', events, function(err, results){
