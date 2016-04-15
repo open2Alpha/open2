@@ -2,7 +2,8 @@
 <div ng-controller="AppCtrl" layout="column" style="height:70px;" ng-cloak>
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2> Open2</h2>
+
+      <h1 style="font-size: 30px; font-weight: bold;" class = "open" ng-click="toggleLeft()"> Open2</h2>
       <span flex></span>
       <md-button class="md-fab md-mini" aria-label="Favorite"> </md-button>
      </div>
@@ -13,12 +14,11 @@
     <!-- friends list -->
  <section layout="row" flex>
    <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-disable-backdrop md-whiteframe="4">
-     <md-toolbar class="md-theme-indigo">
-       <h1 class="md-toolbar-tools">my friends</h1>
+     <md-toolbar class="md-theme-indigo" ng-controller="LeftCtrl">
+       <h3 class= "open" ng-click="close()" >my friends</h1>
      </md-toolbar>
      <md-content layout-padding ng-controller="LeftCtrl">
-       <md-button ng-click="close()" class="md-primary" hide-gt-md> Close Sidenav Left </md-button>
-       <p hide-md show-gt-md> Friends (feature not finished yet) </p>
+       <p> Friends (feature not finished yet) </p>
      </md-content>
    </md-sidenav>
 
@@ -33,7 +33,8 @@
   <div class="dialog-demo-content" layout="row" layout-wrap layout-margin layout-align="center">
 
     <!-- event button -->
-    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)"> new event</md-button>
+    <md-button class="md-primary md-raised" ng-click="showAdvanced($event)" flex class="md-warn"> new event</md-button>
+
   </div>
 
 </div>
@@ -41,7 +42,7 @@
      <!-- notification Box -->
 <div ng-controller="SubheaderAppCtrl" layout="column" flex layout-fill ng-cloak>
   <md-toolbar>
-    <div class="md-toolbar-tools">my events</div>
+    <div class="md-toolbar-tools open" style="font-size: 30px;">my events</div>
   </md-toolbar>
   <md-content md-theme="altTheme">
 

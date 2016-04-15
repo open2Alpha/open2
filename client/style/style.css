@@ -9,6 +9,13 @@
 body {
   background: #FF9000;
 }
+.open {
+  color: #ccc;
+  text-align: center;
+  font-family: 'Vibur', cursive;
+  font-size: 40px;
+
+}
 
 h1 {
   color: #ccc;
