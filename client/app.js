@@ -11,13 +11,19 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
     .when('/dashboard', {
       templateUrl: 'dashboard.html'
     })
+    .when('/signup', {
+      templateUrl: 'signup.html'
+    })
     .otherwise({
       redirectTo: '/'
     })
   });
 
     /// login controller
-  app.controller('loginCtrl', function($scope, Services) {
+  app.controller('loginCtrl', function($scope, Services, $location) {
+    $scope.redirectSignup = function() {
+        $location.path('/signup');
+      };
     $scope.submit = function() {
       var user = {
         username: $scope.username,
@@ -27,6 +33,16 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
     };
   });
 
+  app.controller('signupCtrl', function($scope, Services) {
+      $scope.submit = function() {
+        var user = {
+          username: $scope.username,
+          password: $scope.password
+        };
+      Services.signup(user);
+      };
+
+  });
     // dashboard controller
 app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route) {
   $scope.events = {};
@@ -113,6 +129,21 @@ app.factory('Services', function($http, $location) {
     })
   };
 
+    var signup = function(user) {
+    return $http({
+      method: 'POST',
+      url: 'http://localhost:8080/signup',
+      data: user
+    })
+    .then(function(resp){
+      $location.path('/login');
+    })
+    .catch(function(err){
+      $location.path('/');
+      console.log(err);
+    })
+  };
+
 var uploadDashboard = function() {
   return $http({
     method: 'GET',
@@ -156,7 +187,8 @@ return {
   login: login,
   uploadDashboard: uploadDashboard,
   notify: notify,
-  eventsPost: eventsPost
+  eventsPost: eventsPost,
+  signup: signup
 };
 
 });
@@ -265,7 +297,6 @@ app.controller('SubheaderAppCtrl', function($scope) {
        when: '3:08PM',
        notes: " I'll be in your neighborhood doing errands"
      },
-
    ];
 });
 
