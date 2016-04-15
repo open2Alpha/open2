@@ -1,6 +1,25 @@
 
 var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
-
+  app.config(function($mdThemingProvider) {
+    $mdThemingProvider.definePalette('Open2', {
+  '50': '#ffffff',
+  '100': '#ffdebd',
+  '200': '#ffc285',
+  '300': '#ff9e3d',
+  '400': '#ff8f1f',
+  '500': '#ff8000',
+  '600': '#e07100',
+  '700': '#c26100',
+  '800': '#a35200',
+  '900': '#854300',
+  'A100': '#ffffff',
+  'A200': '#ffdebd',
+  'A400': '#ff8f1f',
+  'A700': '#c26100',
+  'contrastDefaultColor': 'light',
+  'contrastDarkColors': '50 100 200 300 400 500 600 A100 A200 A400'
+});
+  });
     //route config
   app.config(function($routeProvider) {
     $routeProvider
@@ -284,8 +303,24 @@ return {
 
 //NOTIFICATION BOX
 app.config(function($mdThemingProvider) {
- $mdThemingProvider.theme('altTheme')
-   .primaryPalette('purple');
+ $mdThemingProvider.definePalette('ojo', {
+  '50': '#fffefe',
+  '100': '#ffcfb2',
+  '200': '#ffac7a',
+  '300': '#ff7f32',
+  '400': '#ff6c14',
+  '500': '#f45c00',
+  '600': '#d55000',
+  '700': '#b74500',
+  '800': '#983900',
+  '900': '#7a2e00',
+  'A100': '#fffefe',
+  'A200': '#ffcfb2',
+  'A400': '#ff6c14',
+  'A700': '#b74500',
+  'contrastDefaultColor': 'light',
+  'contrastDarkColors': '50 100 200 300 400 A100 A200 A400'
+});
 });
 
 
