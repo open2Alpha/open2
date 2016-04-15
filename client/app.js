@@ -148,6 +148,10 @@ app.factory('Services', function($http, $location) {
     })
   };
 
+  var logout = function(){
+    $location.path('/');
+  };
+
     var signup = function(user) {
     return $http({
       method: 'POST',
@@ -207,7 +211,8 @@ return {
   uploadDashboard: uploadDashboard,
   notify: notify,
   eventsPost: eventsPost,
-  signup: signup
+  signup: signup,
+  logout: logout
 };
 
 });
@@ -239,9 +244,12 @@ return {
 //angular materials controllers
 //SIDE NAV
 
- app.controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
+ app.controller('AppCtrl', function ($scope, $timeout, Services, $mdSidenav, $log) {
    $scope.toggleLeft = buildDelayedToggler('left');
    $scope.toggleRight = buildToggler('right');
+   $scope.logout = function(){
+     Services.logout();
+   }
    $scope.isOpenRight = function(){
      return $mdSidenav('right').isOpen();
    };
@@ -353,4 +361,3 @@ function DialogController($scope, $mdDialog) {
  //   .controller('DateController', ['$scope', function($scope) {
 
  //   }]);
-
