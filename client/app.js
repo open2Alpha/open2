@@ -48,6 +48,10 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
         username: $scope.username,
         password: $scope.password
       };
+      console.log('scope username', $scope.username);
+      console.log('services username', Services.username);
+      Services.username = $scope.username;
+      console.log("services username after login",Services.username);
     Services.login(user);
     };
   });
@@ -104,7 +108,8 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
   $scope.click = function() {
     var eventInfo = {
       'event' : $scope.user.activity,
-      'time' : $scope.time.value
+      'time' : $scope.time.value,
+      'username': Services.username
     }
     console.log(eventInfo);
     // console.log($scope.user.activity);
@@ -133,7 +138,10 @@ app.filter('reverse', function() {
 // })
 
 app.factory('Services', function($http, $location) {
+  var username;
+
   var login = function(user) {
+    console.log('services username inside signup', username);
     return $http({
       method: 'POST',
       url: 'http://localhost:8080',
@@ -196,6 +204,7 @@ var uploadDashboard = function() {
   };
 
    var eventsPost = function(eventInfo) {
+    console.log('eventinfo inside events post', eventInfo);
 
       return $http({
         method: 'POST',
@@ -212,7 +221,8 @@ return {
   notify: notify,
   eventsPost: eventsPost,
   signup: signup,
-  logout: logout
+  logout: logout,
+  username: username
 };
 
 });
