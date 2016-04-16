@@ -58,11 +58,11 @@ app.post('/', function(request, response){
 
 app.post('/dashboard', function(request, response) {
 	console.log('inside dashboard username', request.body.username);
-	 var event = request.body.event;
-     var timestamp = request.body.time;
-     var username = request.body.username;
+	var event = request.body.event;
+    var timestamp = request.body.time;
+    var username = request.body.username;
 
-     console.log(event);
+    console.log(event);
 	var events = {eventname: event, timestamp: timestamp};
 
 
@@ -144,25 +144,17 @@ var addUserEvents = function(creator, eventId, status){
 //   });
 // });
 
-app.get('/dashboard', function(request, response) {
-  db.query('SELECT * FROM Events', function(err, rows){
+
+app.get('/dashboard', function(request, response){
+
+// Select * From Users, Events, Where Events.id = ? AND Users.user_id = Events.user_id 
+
+	db.query('SELECT Users.username, Events.eventname, Events.timestamp FROM Users INNER JOIN UserEvents ON Users.id = UserEvents.user_id INNER JOIN Events ON Events.id = UserEvents.event_id', function(err, rows){
 		if(err){
 			throw err;
 		}else{
 			response.send(rows);
-		}
-	})
-});
 
-app.get('', function(request, response){
-
-	var eventId = request.body.eventId;
-
-	db.query('SELECT * FROM UserEvents WHERE `event_id` = ?;', [eventId], function(err, rows){
-		if(err){
-			throw err;
-		}else{
-			response.send(rows);
 		}
 	})
 
