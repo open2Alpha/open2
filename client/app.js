@@ -43,17 +43,23 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
     $scope.redirectSignup = function() {
         $location.path('/signup');
       };
+
+    
+     // localStorage.setItem('username', $scope.username);
+   
     $scope.submit = function() {
       var user = {
         username: $scope.username,
         password: $scope.password
       };
-      console.log('scope username', $scope.username);
-      console.log('services username', Services.username);
-      Services.username = $scope.username;
-      console.log("services username after login",Services.username);
-    Services.login(user);
+      
+    localStorage.setItem('username', $scope.username);
+
+      // Services.username = $scope.username;
+      console.log("services username after login", Services.username);
+       Services.login(user);
     };
+
   });
 
   app.controller('signupCtrl', function($scope, Services) {
@@ -66,21 +72,28 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
       };
 
   });
+
+
     // dashboard controller
 app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route) {
   $scope.events = {};
   Services.uploadDashboard()
   .then(function(data){
-   
     $scope.events.fetch = true;
     $scope.events.list = data;
+});
+  Services.uploadFriendslist()
+  .then(function(data){
+    console.log("friendslist i got from server ", data.data)
+      $scope.friends = data.data;
+      console.log("friendslist to iterate", $scope.friends)
   });
+
 
   //this is our pop up dialog box
 
-  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-
-  $scope.showAdvanced = function(ev) {
+$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+$scope.showAdvanced = function(ev) {
     var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
     $mdDialog.show({
       controller: DialogController,
@@ -108,18 +121,27 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
     var eventInfo = {
       'event' : $scope.user.activity,
       'time' : $scope.time.value,
-      'username': Services.username
+      'username': localStorage.getItem('username')
     }
+     
      console.log("time", eventInfo);
    
  
     Services.eventsPost(eventInfo)
     .then(function(respData){
        console.log('i got this back from server/database', respData);
+       $route.reload();
     })
-    $route.reload();
+    
   };
    
+
+   //$scope.friends = {};
+   
+
+  
+
+
  $scope.status = 'join';
  $scope.join = function() {
   if($scope.status === 'join') {
@@ -185,7 +207,7 @@ var uploadDashboard = function() {
   })
   .then(function(resp){
    
-
+   console.log("data in uploadDashboard", resp.data)
     return resp.data;
 
   });
@@ -216,7 +238,18 @@ var uploadDashboard = function() {
 
       })
 
+   };
+
+   var uploadFriendslist = function() {
+      return $http ({
+        method: 'GET',
+        url: 'http://localhost:8080/friends'
+      });
+
+
+
    }
+
 
 return {
   login: login,
@@ -225,7 +258,8 @@ return {
   eventsPost: eventsPost,
   signup: signup,
   logout: logout,
-  username: username
+  username: username,
+  uploadFriendslist: uploadFriendslist
 };
 
 });

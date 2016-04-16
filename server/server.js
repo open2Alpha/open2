@@ -95,7 +95,9 @@ app.post('/dashboard', function(request, response) {
 	      				if(err){
 	      					throw err;
 	      				}else{
+	      					//console.log("i am a row". rows)
 	      					var userId = rows[0].id;
+
 	      					//console.log("CREATING EVENTS",userId);
 	      					addUserEvents(userId, eventId, "yes");
 	      				}
@@ -106,53 +108,40 @@ app.post('/dashboard', function(request, response) {
 	});
 })
 
-app.post('/', function(request, response){
-	var userId = request.body.userId;
-	var eventId = request.body.eventId;
-	var status = request.body.status;
+// app.post('/', function(request, response){
+// 	var userId = request.body.userId;
+// 	var eventId = request.body.eventId;
+// 	var status = request.body.status;
 
-	addUserEvents(userId, eventId, status);
-})
+// 	addUserEvents(userId, eventId, status);
+// })
 
 
 var addUserEvents = function(creator, eventId, status){
 	var userEvents = {user_id: creator, event_id: eventId, status: status};
+	console.log(userEvents)
 	db.query('INSERT INTO UserEvents SET ?', userEvents, function(err, results){
 		if (err) {
 		    console.log(err);
-		    response.sendStatus(500);
+		    //response.sendStatus(500);
 		}else{
 			console.log("Add User Events Join Table");
 			console.log("Add User Events", results);
+
 		}
 	});
 }
-
-// app.get('/form', function(req,res){
-//   twilio.sendMessage({
-//     to: '+18185227459',
-//     from: '+12678634314',
-//     body: 'Hey Im Available!'
-//   },
-//    function(err, text){
-//     if (err) {
-//       console.log('Error: ', err);
-//       throw err;
-//     }
-//     res.send(text);
-//     console.log(" sent! text: ", text);
-//   });
-// });
 
 
 app.get('/dashboard', function(request, response){
 
 // Select * From Users, Events, Where Events.id = ? AND Users.user_id = Events.user_id 
 
-	db.query('SELECT Users.username, Events.eventname, Events.timestamp FROM Users INNER JOIN UserEvents ON Users.id = UserEvents.user_id INNER JOIN Events ON Events.id = UserEvents.event_id', function(err, rows){
+	db.query('SELECT Users.username, Events.eventname, Events.timestamp FROM Users INNER JOIN UserEvents ON Users.id = UserEvents.user_id INNER JOIN Events ON Events.id = UserEvents.event_id ORDER BY event_id', function(err, rows){
 		if(err){
 			throw err;
 		}else{
+			console.log("query from database", rows);
 			response.send(rows);
 
 		}
@@ -160,7 +149,16 @@ app.get('/dashboard', function(request, response){
 
 })
 
-
+app.get('/friends', function(request, response){
+	db.query('SELECT username FROM Users', function(err, results){
+		if(err){
+			throw err;
+		}else{
+			console.log("friends list from db", results);
+			response.send(results);
+		}
+	})
+})
 
 
 
