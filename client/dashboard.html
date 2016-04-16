@@ -5,7 +5,8 @@
 
       <h1 style="font-size: 30px; font-weight: bold;" class = "open" ng-click="toggleLeft()"> Open2</h2>
       <span flex></span>
-      <md-button class="md-fab md-mini" aria-label="Favorite" ng-click="logout()"> </md-button>
+   
+      <md-button class="md-warn md-raised md-hue-2" ng-click="logout()">logout</md-button>
      </div>
    </md-toolbar>
 </div>
@@ -18,7 +19,12 @@
        <h3 class= "open" ng-click="close()" >my friends</h1>
      </md-toolbar>
      <md-content layout-padding ng-controller="LeftCtrl">
-       <p> Friends (feature not finished yet) </p>
+     <ul ng-controller = 'dashboardCtrl' > 
+     
+     <li ng-repeat = 'friend in friends'>{{friend.username}} </li>
+
+      </ul>
+    
      </md-content>
    </md-sidenav>
 
@@ -49,7 +55,7 @@
   <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
     <ul>
-      <li ng-repeat="event in events.list | reverse" style = "list-style: none"> <span style = "font-weight: bold"> {{ event.eventname}} </span><span> {{event.timestamp}} </span></li>
+      <li ng-repeat="event in events.list | reverse" style = "list-style: none"> <span style = "font-weight: bold"> {{event.username}} wants to {{ event.eventname}} </span><span> {{event.timestamp.slice(11, 19)}} </span> <md-button  class="md-raised md-primary" ng-click = 'join()'>{{status}}</md-button></li>
     </ul>
   </div>
   </div>

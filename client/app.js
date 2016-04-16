@@ -43,17 +43,23 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
     $scope.redirectSignup = function() {
         $location.path('/signup');
       };
+
+    
+     // localStorage.setItem('username', $scope.username);
+   
     $scope.submit = function() {
       var user = {
         username: $scope.username,
         password: $scope.password
       };
-      console.log('scope username', $scope.username);
-      console.log('services username', Services.username);
-      Services.username = $scope.username;
-      console.log("services username after login",Services.username);
-    Services.login(user);
+      
+    localStorage.setItem('username', $scope.username);
+
+      // Services.username = $scope.username;
+      console.log("services username after login", Services.username);
+       Services.login(user);
     };
+
   });
 
   app.controller('signupCtrl', function($scope, Services) {
@@ -66,21 +72,28 @@ var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
       };
 
   });
+
+
     // dashboard controller
 app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route) {
   $scope.events = {};
   Services.uploadDashboard()
   .then(function(data){
-    console.log('I am dashboard data, I am already in your controllerr', data)
     $scope.events.fetch = true;
     $scope.events.list = data;
+});
+  Services.uploadFriendslist()
+  .then(function(data){
+    console.log("friendslist i got from server ", data.data)
+      $scope.friends = data.data;
+      console.log("friendslist to iterate", $scope.friends)
   });
+
 
   //this is our pop up dialog box
 
-  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-
-  $scope.showAdvanced = function(ev) {
+$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+$scope.showAdvanced = function(ev) {
     var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
     $mdDialog.show({
       controller: DialogController,
@@ -100,25 +113,44 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
   //this the end of our pop up dialog box.
 
   $scope.time = {
-       value: new Date(1970, 0, 1, 14, 57, 0)
+       value: new Date(2016, 3, 9)
      };
     //end of our time selector
 
-
-  $scope.click = function() {
+ $scope.click = function() {
     var eventInfo = {
       'event' : $scope.user.activity,
       'time' : $scope.time.value,
-      'username': Services.username
+      'username': localStorage.getItem('username')
     }
-    console.log(eventInfo);
-    // console.log($scope.user.activity);
+     
+     console.log("time", eventInfo);
+   
+ 
     Services.eventsPost(eventInfo)
     .then(function(respData){
        console.log('i got this back from server/database', respData);
+       $route.reload();
     })
-    $route.reload();
+    
+  };
+   
+
+   //$scope.friends = {};
+   
+
+  
+
+
+ $scope.status = 'join';
+ $scope.join = function() {
+  if($scope.status === 'join') {
+    $scope.status = 'unjoin';
   }
+  else {
+    $scope.status = 'join';
+  }
+};
 
 });
 
@@ -129,13 +161,6 @@ app.filter('reverse', function() {
 });
 
 
-    // this if for Twillio
-
-// app.controller('clickButton', function($scope, click){
-//   $scope.click = function(){
-//     click.notify({sent: "data"});
-//   }
-// })
 
 app.factory('Services', function($http, $location) {
   var username;
@@ -181,8 +206,8 @@ var uploadDashboard = function() {
     url: 'http://localhost:8080/dashboard',
   })
   .then(function(resp){
-    console.log('inside uploadDashboard function', resp.data);
-
+   
+   console.log("data in uploadDashboard", resp.data)
     return resp.data;
 
   });
@@ -213,7 +238,18 @@ var uploadDashboard = function() {
 
       })
 
+   };
+
+   var uploadFriendslist = function() {
+      return $http ({
+        method: 'GET',
+        url: 'http://localhost:8080/friends'
+      });
+
+
+
    }
+
 
 return {
   login: login,
@@ -222,39 +258,14 @@ return {
   eventsPost: eventsPost,
   signup: signup,
   logout: logout,
-  username: username
+  username: username,
+  uploadFriendslist: uploadFriendslist
 };
 
 });
 
 
-// app.factory('click', function($http) {
-//   var notify = function(sendText){
-//     return $http({
-//       method: 'POST',
-//       url: 'http://localhost:8080/dashboard',
-//       data: sendText
-//     })
-//     .then(function(data){
-//       console.log("Sent the Messages", data);
-//     })
-//     .catch(function(err){
-//       $location.path('/');
-//       console.log(err);
-//     })
-//   };
-//   return {
-//     notify: notify
-//   };
-//  });
-
-
-
-
-//angular materials controllers
-//SIDE NAV
-
- app.controller('AppCtrl', function ($scope, $timeout, Services, $mdSidenav, $log) {
+app.controller('AppCtrl', function ($scope, $timeout, Services, $mdSidenav, $log) {
    $scope.toggleLeft = buildDelayedToggler('left');
    $scope.toggleRight = buildToggler('right');
    $scope.logout = function(){
@@ -367,7 +378,4 @@ function DialogController($scope, $mdDialog) {
   };
 }
 
- // angular.module('timeExample', [])
- //   .controller('DateController', ['$scope', function($scope) {
 
- //   }]);
