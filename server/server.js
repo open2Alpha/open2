@@ -57,8 +57,11 @@ app.post('/', function(request, response){
 });
 
 app.post('/dashboard', function(request, response) {
+	console.log('inside dashboard username', request.body.username);
 	 var event = request.body.event;
      var timestamp = request.body.time;
+     var username = request.body.username;
+
      console.log(event);
 	var events = {eventname: event, timestamp: timestamp};
 
@@ -87,13 +90,28 @@ app.post('/dashboard', function(request, response) {
 	      			throw err;
 	      		}else{
 	      			response.send(rows);
+
+	      			db.query('SELECT * FROM Users WHERE `username` = ?;', [username], function(err, rows) {
+	      				if(err){
+	      					throw err;
+	      				}else{
+	      					var userId = rows[0].id;
+	      					//console.log("CREATING EVENTS",userId);
+	      					addUserEvents(userId, eventId, "yes");
+	      				}
+	      			});
 	      		}
 	      	})
 	    }
 	});
+})
 
+app.post('/', function(request, response){
+	var userId = request.body.userId;
+	var eventId = request.body.eventId;
+	var status = request.body.status;
 
-
+	addUserEvents(userId, eventId, status);
 })
 
 
@@ -135,6 +153,20 @@ app.get('/dashboard', function(request, response) {
 		}
 	})
 });
+
+app.get('', function(request, response){
+
+	var eventId = request.body.eventId;
+
+	db.query('SELECT * FROM UserEvents WHERE `event_id` = ?;', [eventId], function(err, rows){
+		if(err){
+			throw err;
+		}else{
+			response.send(rows);
+		}
+	})
+
+})
 
 
 
