@@ -71,7 +71,7 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
   $scope.events = {};
   Services.uploadDashboard()
   .then(function(data){
-    console.log('I am dashboard data, I am already in your controllerr', data)
+   
     $scope.events.fetch = true;
     $scope.events.list = data;
   });
@@ -100,25 +100,35 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
   //this the end of our pop up dialog box.
 
   $scope.time = {
-       value: new Date(1970, 0, 1, 14, 57, 0)
+       value: new Date(2016, 3, 9)
      };
     //end of our time selector
 
-
-  $scope.click = function() {
+ $scope.click = function() {
     var eventInfo = {
       'event' : $scope.user.activity,
       'time' : $scope.time.value,
       'username': Services.username
     }
-    console.log(eventInfo);
-    // console.log($scope.user.activity);
+     console.log("time", eventInfo);
+   
+ 
     Services.eventsPost(eventInfo)
     .then(function(respData){
        console.log('i got this back from server/database', respData);
     })
     $route.reload();
+  };
+   
+ $scope.status = 'join';
+ $scope.join = function() {
+  if($scope.status === 'join') {
+    $scope.status = 'unjoin';
   }
+  else {
+    $scope.status = 'join';
+  }
+};
 
 });
 
@@ -129,13 +139,6 @@ app.filter('reverse', function() {
 });
 
 
-    // this if for Twillio
-
-// app.controller('clickButton', function($scope, click){
-//   $scope.click = function(){
-//     click.notify({sent: "data"});
-//   }
-// })
 
 app.factory('Services', function($http, $location) {
   var username;
@@ -181,7 +184,7 @@ var uploadDashboard = function() {
     url: 'http://localhost:8080/dashboard',
   })
   .then(function(resp){
-    console.log('inside uploadDashboard function', resp.data);
+   
 
     return resp.data;
 
@@ -228,33 +231,7 @@ return {
 });
 
 
-// app.factory('click', function($http) {
-//   var notify = function(sendText){
-//     return $http({
-//       method: 'POST',
-//       url: 'http://localhost:8080/dashboard',
-//       data: sendText
-//     })
-//     .then(function(data){
-//       console.log("Sent the Messages", data);
-//     })
-//     .catch(function(err){
-//       $location.path('/');
-//       console.log(err);
-//     })
-//   };
-//   return {
-//     notify: notify
-//   };
-//  });
-
-
-
-
-//angular materials controllers
-//SIDE NAV
-
- app.controller('AppCtrl', function ($scope, $timeout, Services, $mdSidenav, $log) {
+app.controller('AppCtrl', function ($scope, $timeout, Services, $mdSidenav, $log) {
    $scope.toggleLeft = buildDelayedToggler('left');
    $scope.toggleRight = buildToggler('right');
    $scope.logout = function(){
@@ -367,7 +344,4 @@ function DialogController($scope, $mdDialog) {
   };
 }
 
- // angular.module('timeExample', [])
- //   .controller('DateController', ['$scope', function($scope) {
 
- //   }]);
