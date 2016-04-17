@@ -76,6 +76,7 @@ app.controller('signupCtrl', function($scope, Services) {
 
 // dashboard controller
 app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route) {
+
   $scope.events = {};
   Services.uploadDashboard()
   .then(function(data){
@@ -88,6 +89,19 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
     $scope.friends = data.data;
     console.log("friendslist to iterate", $scope.friends)
   });
+ 
+   $scope.join = function(id, user) {
+
+   var joinInfo = {
+    'eventId': id,
+    'user': user
+   }
+
+  Services.joinEvent(joinInfo);
+console.log(joinInfo);
+
+
+   };
 
 
   //this is our pop up dialog box
@@ -139,18 +153,8 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
   //$scope.friends = {};
 
 
+$scope.status = 'join';
 
-
-
-  $scope.status = 'join';
-  $scope.join = function() {
-    if($scope.status === 'join') {
-      $scope.status = 'unjoin';
-    }
-    else {
-      $scope.status = 'join';
-    }
-  };
 
 });
 
@@ -248,6 +252,16 @@ app.factory('Services', function($http, $location) {
 
   }
 
+var joinEvent = function(eventId) {
+
+    return $http({
+      method: 'POST',
+      url: 'http://localhost:8080/dashboard/join',
+      data: eventId
+
+      });
+
+};
 
   return {
     login: login,
@@ -257,7 +271,8 @@ app.factory('Services', function($http, $location) {
     signup: signup,
     logout: logout,
     username: username,
-    uploadFriendslist: uploadFriendslist
+    uploadFriendslist: uploadFriendslist,
+    joinEvent: joinEvent
   };
 
 });

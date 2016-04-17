@@ -55,7 +55,7 @@
   <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
     <ul>
-      <li ng-repeat="event in events.list | reverse" style = "list-style: none"> <span style = "font-weight: bold"> {{event.username}} wants to {{ event.eventname}} </span><span> {{event.timestamp.slice(11, 19)}} </span> <md-button  class="md-raised md-primary" ng-click = 'join()'>{{status}}</md-button></li>
+      <li ng-repeat="event in events.list | reverse" style = "list-style: none"> <span style = "font-weight: bold"> {{event.username}} wants to {{ event.eventname}} </span><span> {{event.timestamp.slice(11, 19)}} </span> <md-button  class="md-raised md-primary" ng-click = 'join(event.id, event.username)'>{{status}}</md-button></li>
     </ul>
   </div>
   </div>

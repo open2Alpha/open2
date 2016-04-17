@@ -52,7 +52,7 @@ router.post('/events', function(request, response) {
               var userId = rows[0].id;
 
               //console.log("CREATING EVENTS",userId);
-              addUserEvents(userId, eventId, "yes");
+              addUserEvents(userId, eventId, true);
             }
           });
         }
@@ -90,7 +90,7 @@ router.get('/upload', function(request, response){
 
   // Select * From Users, Events, Where Events.id = ? AND Users.user_id = Events.user_id
 
-  db.query('SELECT Users.username, Events.eventname, Events.timestamp FROM Users INNER JOIN UserEvents ON Users.id = UserEvents.user_id INNER JOIN Events ON Events.id = UserEvents.event_id ORDER BY event_id', function(err, rows){
+  db.query('SELECT Users.username, Events.eventname, Events.timestamp, UserEvents.id FROM Users INNER JOIN UserEvents ON Users.id = UserEvents.user_id INNER JOIN Events ON Events.id = UserEvents.event_id ORDER BY event_id', function(err, rows){
     if(err){
       throw err;
     }else{
@@ -113,6 +113,22 @@ router.get('/friends', function(request, response){
 	})
 })
 
+router.post('/join', function(request, response){
+   //console.log(request.body);
+  var username = request.body.user;
+  var eventId = request.body.eventId;
 
+
+  db.query('SELECT id FROM Users WHERE `username` = ?;', [username], function(err, rows){
+    if(err){
+      throw err;
+    }else{
+      //console.log("INSIDE JOIN POST",rows);
+      var userId = rows;
+      addUserEvents(userId, eventId, false);
+    }
+  })
+
+})
 
 module.exports = router;
