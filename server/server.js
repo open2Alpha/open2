@@ -9,156 +9,20 @@ var app = express();
 
 app.use(cors());
 
-//var routes = require('routes');
-
+//routes
+var index = require('./index');
+var signup = require('./signup');
+var dashboard = require('./dashboard');
 
 app.use(bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../client'));
-// app.use('/api/', router);
-
-app.post('/signup', function(request, response){
-
-    var username = request.body.username;
-    var password = request.body.password;
-    //var mobile = request.body.mobile;
-
-    users = {username: username, password: password};
-
-    db.query('INSERT INTO Users SET ?', users, function(err, results){
-        if(err){
-            response.sendStatus(500);
-        }else{
-        	response.send('/login');
-            console.log("New user added to database");
-        }
-    })
-})
-
-app.post('/', function(request, response){
-	var username = request.body.username;
-	var password = request.body.password;
-
-	db.query('SELECT * FROM Users WHERE `username` = ?;', [username], function(err, rows) {
-		console.log(rows);
-		if (err) {
-			throw err;
-		} else {
-			if(password !== rows[0].password){
-				console.log("Incorrect password");
-			}else{
-				console.log("Success");
-				response.send('/dashboard');
-			}
-		}
-	})
-
-});
-
-app.post('/dashboard', function(request, response) {
-	console.log('inside dashboard username', request.body.username);
-	var event = request.body.event;
-    var timestamp = request.body.time;
-    var username = request.body.username;
-
-    console.log(event);
-	var events = {eventname: event, timestamp: timestamp};
 
 
-   twilio.sendMessage({
-      to: '+18185227459',
-      from: '+12678634314',
-      body: 'I am available to ' + event + " at " + timestamp
-    });
-
-
-	db.query('INSERT INTO Events SET ?', events, function(err, results){
-		if (err) {
-	        console.log(err);
-	        response.sendStatus(500);
-	    }else{
-	      	console.log("Event added");
-	      	console.log("return from database, inside server", results);
-	      	//response.send(results);
-	      	// results.insertId, is eventId
-	      	var eventId = results.insertId;
-	      	//addUserEvents(2, eventId, "yes");
-
-	      	db.query('SELECT * FROM Events WHERE `id` = ?;', [eventId], function(err, rows){
-	      		if(err){
-	      			throw err;
-	      		}else{
-	      			response.send(rows);
-
-	      			db.query('SELECT * FROM Users WHERE `username` = ?;', [username], function(err, rows) {
-	      				if(err){
-	      					throw err;
-	      				}else{
-	      					//console.log("i am a row". rows)
-	      					var userId = rows[0].id;
-
-	      					//console.log("CREATING EVENTS",userId);
-	      					addUserEvents(userId, eventId, "yes");
-	      				}
-	      			});
-	      		}
-	      	})
-	    }
-	});
-})
-
-// app.post('/', function(request, response){
-// 	var userId = request.body.userId;
-// 	var eventId = request.body.eventId;
-// 	var status = request.body.status;
-
-// 	addUserEvents(userId, eventId, status);
-// })
-
-
-var addUserEvents = function(creator, eventId, status){
-	var userEvents = {user_id: creator, event_id: eventId, status: status};
-	console.log(userEvents)
-	db.query('INSERT INTO UserEvents SET ?', userEvents, function(err, results){
-		if (err) {
-		    console.log(err);
-		    //response.sendStatus(500);
-		}else{
-			console.log("Add User Events Join Table");
-			console.log("Add User Events", results);
-
-		}
-	});
-}
-
-
-app.get('/dashboard', function(request, response){
-
-// Select * From Users, Events, Where Events.id = ? AND Users.user_id = Events.user_id 
-
-	db.query('SELECT Users.username, Events.eventname, Events.timestamp FROM Users INNER JOIN UserEvents ON Users.id = UserEvents.user_id INNER JOIN Events ON Events.id = UserEvents.event_id ORDER BY event_id', function(err, rows){
-		if(err){
-			throw err;
-		}else{
-			console.log("query from database", rows);
-			response.send(rows);
-
-		}
-	})
-
-})
-
-app.get('/friends', function(request, response){
-	db.query('SELECT username FROM Users', function(err, results){
-		if(err){
-			throw err;
-		}else{
-			console.log("friends list from db", results);
-			response.send(results);
-		}
-	})
-})
+app.use('/index', index);
+app.use('/signup', signup);
+app.use('/dashboard', dashboard);
 
 
 
