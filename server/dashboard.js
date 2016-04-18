@@ -1,6 +1,6 @@
 var express = require('express');
 var db = require('./db.js');
-var bcrypt = require('bcrypt-nodejs');
+//var bcrypt = require('bcrypt-nodejs');
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var twilio = require('twilio')('AC40691c0816f7dd360b043b23331f4f43','89f0d01b69bb6bcc473724b5b232b6f4');
@@ -85,6 +85,10 @@ var addUserEvents = function(creator, eventId, status){
     }
   });
 }
+
+
+
+
 
 
 router.get('/upload', function(request, response){
