@@ -8,15 +8,13 @@ var bcrypt = require('bcrypt-nodejs');
 var app = express();
 app.use(cors());
 
-
+//checks username and password
 router.post('/homepage', function(request, response){
   var username = request.body.username;
   var password = request.body.password;
 
 
-
   db.query('SELECT * FROM Users WHERE `username` = ?;', [username], function(err, rows) {
-    // console.log(rows);
     console.log("This is our password in our db", rows[0].password)
     var hash = bcrypt.hashSync(password);
 
@@ -28,7 +26,6 @@ router.post('/homepage', function(request, response){
       if(!bcrypt.compareSync( password ,rows[0].password )){
         console.log("Incorrect password");
       }else{
-        console.log("Success");
         response.send('/dashboard');
       }
     }
