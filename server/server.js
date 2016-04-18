@@ -2,7 +2,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var db = require('./db.js');
 var cors = require('cors');
-//var router = express.Router();
 var twilio = require('twilio')('AC40691c0816f7dd360b043b23331f4f43','89f0d01b69bb6bcc473724b5b232b6f4');
 
 var app = express();
@@ -19,13 +18,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/../client'));
 
-
 app.use('/index', index);
 app.use('/signup', signup);
 app.use('/dashboard', dashboard);
-
-
-
 
 var host = process.env.PORT || 8080;
 
