@@ -75,33 +75,134 @@ app.controller('signupCtrl', function($scope, Services) {
 
 
 // dashboard controller
-app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route) {
+app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route, $sce) {
 
   $scope.events = {};
+
+
   Services.uploadDashboard()
   .then(function(data){
     $scope.events.fetch = true;
-    $scope.events.list = data;
+
+   // for(var i = 0; i<data.length; i++) {
+
+   //   if(data[i].created_by === 1 && data[i].username === localStorage.getItem('username')) {
+   //      $scope.hiddenDiv = 2;
+
+   //   }
+   //   else if (data[i].created_by === undefined && data[i].username!==localStorage.getItem('username')) {
+   //      $scope.hiddenDiv = 0;
+
+   //   }
+   //   else if (data[i].created_by === 0 && data[i].username === localStorage.getItem('username')) {
+   //    $scope.hiddenDiv = 1;
+   //   }
+   // }
+    var dataTodisplay = [];
+   data.forEach(function(item) {
+
+      if(item.username===localStorage.getItem('username') && item.created_by === 0) {
+        // $scope.join = false;
+        // $scope.unjoin = true;
+        // $scope.createdBy = false;
+
+
+        dataTodisplay.push(
+         {
+          'eventname': item.eventname,
+          'id': item.id,
+          'timestamp': item.timestamp,
+          'username': item.username,
+          'createdBy': item.created_by,
+          // 'status': $sce.trustAsHtml('<md-button class="md-warn md-raised md-hue-2" ng-click="join(event.id)">fsadsf {{event.status}}</md-button>')
+          'status': 'unjoin'
+
+         } );
+
+
+
+      }
+      else if (item.username!== localStorage.getItem('username') && item.created_by === 1) {
+
+
+
+          dataTodisplay.push({
+          'eventname': item.eventname,
+          'id': item.id,
+          'timestamp': item.timestamp,
+          'username': item.username,
+          'createdBy': item.created_by,
+          // 'status': $sce.trustAsHtml('<md-button class="md-warn md-raised md-hue-2" ng-click="join(event.id)">fsadsf {{event.status}}</md-button>')
+          'status': 'join'
+
+          });
+
+
+
+        }
+      else if (item.username=== localStorage.getItem('username') && item.created_by ===1 ) {
+          // $scope.join = false;
+          // $scope.unjoin = true;
+          // $scope.createdBy = true;
+
+        dataTodisplay.push({
+          'eventname': item.eventname,
+          'id': item.id,
+          'timestamp': item.timestamp,
+          'username': item.username,
+          'createdBy': item.created_by,
+          'status': 'created by me'
+
+          });
+}
+
+
+})
+
+  $scope.events.list = dataTodisplay;
+    console.log("This is data from upload Dash", data);
+
+
   });
+
+
+
   Services.uploadFriendslist()
   .then(function(data){
     console.log("friendslist i got from server ", data.data)
     $scope.friends = data.data;
     console.log("friendslist to iterate", $scope.friends)
   });
- 
-   $scope.join = function(id, user) {
 
-   var joinInfo = {
-    'eventId': id,
-    'user': user
-   }
+   $scope.join = function(id, status) {
 
-  Services.joinEvent(joinInfo);
-console.log(joinInfo);
+       if(status === 'join') {
+
+      var joinInfo = {
+      'eventId': id,
+      'user': localStorage.getItem('username')
+      };
+
+      Services.joinEvent(joinInfo);
 
 
-   };
+
+
+       $route.reload();
+    }
+
+    else if(status === 'unjoin') {
+    // delete the event from database
+    console.log('unjoin me from this event', id)
+       Services.unjoinEvent(id);
+
+       $route.reload();
+
+    }
+
+  }
+
+
 
 
   //this is our pop up dialog box
@@ -153,7 +254,7 @@ console.log(joinInfo);
   //$scope.friends = {};
 
 
-$scope.status = 'join';
+
 
 
 });
@@ -260,6 +361,17 @@ var joinEvent = function(eventId) {
       data: eventId
 
       });
+
+};
+
+var unjoinEvent = function(userEventId) {
+
+     return $http({
+       method: 'POST',
+       url: 'http://localhost:8080/dashboard/unjoin',
+       data: userEventId
+
+     });
 
 };
 

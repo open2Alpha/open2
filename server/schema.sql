@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `UserEvents` (
 	`id` INTEGER NOT NULL AUTO_INCREMENT,
 	`user_id` INTEGER NOT NULL,
 	`event_id` INTEGER NOT NULL,
-	`createdBy` BOOLEAN NULL DEFAULT NULL,
+	`created_by` BOOLEAN NULL DEFAULT NULL,
 	PRIMARY KEY(`id`),
 	FOREIGN KEY(`user_id`) REFERENCES Users(`id`),
 	FOREIGN KEY(`event_id`) REFERENCES Events(`id`)

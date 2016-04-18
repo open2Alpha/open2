@@ -1,5 +1,6 @@
 var express = require('express');
 var db = require('./db.js');
+var bcrypt = require('bcrypt-nodejs');
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var twilio = require('twilio')('AC40691c0816f7dd360b043b23331f4f43','89f0d01b69bb6bcc473724b5b232b6f4');
@@ -71,7 +72,7 @@ router.post('/events', function(request, response) {
 
 
 var addUserEvents = function(creator, eventId, status){
-  var userEvents = {user_id: creator, event_id: eventId, status: status};
+  var userEvents = {user_id: creator, event_id: eventId, created_by: status};
   console.log(userEvents)
   db.query('INSERT INTO UserEvents SET ?', userEvents, function(err, results){
     if (err) {
@@ -90,7 +91,7 @@ router.get('/upload', function(request, response){
 
   // Select * From Users, Events, Where Events.id = ? AND Users.user_id = Events.user_id
 
-  db.query('SELECT Users.username, Events.eventname, Events.timestamp, UserEvents.id FROM Users INNER JOIN UserEvents ON Users.id = UserEvents.user_id INNER JOIN Events ON Events.id = UserEvents.event_id ORDER BY event_id', function(err, rows){
+  db.query('SELECT Users.username, Events.eventname, Events.timestamp, UserEvents.id, UserEvents.created_by FROM Users INNER JOIN UserEvents ON Users.id = UserEvents.user_id INNER JOIN Events ON Events.id = UserEvents.event_id ORDER BY event_id', function(err, rows){
     if(err){
       throw err;
     }else{
@@ -116,16 +117,25 @@ router.get('/friends', function(request, response){
 router.post('/join', function(request, response){
    //console.log(request.body);
   var username = request.body.user;
-  var eventId = request.body.eventId;
+  var id = request.body.eventId;
 
 
   db.query('SELECT id FROM Users WHERE `username` = ?;', [username], function(err, rows){
     if(err){
       throw err;
     }else{
-      //console.log("INSIDE JOIN POST",rows);
-      var userId = rows;
-      addUserEvents(userId, eventId, false);
+      console.log("INSIDE JOIN POST",rows[0].id);
+      var userId = rows[0].id;
+
+      db.query('SELECT event_id FROM UserEvents WHERE `id` = ?;', [id],function(err, rows){
+          if(err){
+            throw err;
+          }else{
+            console.log("INSIDE POST USEREVENts", rows[0].event_id);
+            var eventId = rows[0].event_id;
+            addUserEvents(userId, eventId, false);
+          }
+      })
     }
   })
 

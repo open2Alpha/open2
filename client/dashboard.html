@@ -5,7 +5,7 @@
 
       <h1 style="font-size: 30px; font-weight: bold;" class = "open" ng-click="toggleLeft()"> Open2</h2>
       <span flex></span>
-   
+
       <md-button class="md-warn md-raised md-hue-2" ng-click="logout()">logout</md-button>
      </div>
    </md-toolbar>
@@ -19,12 +19,27 @@
        <h3 class= "open" ng-click="close()" >my friends</h1>
      </md-toolbar>
      <md-content layout-padding ng-controller="LeftCtrl">
-     <ul ng-controller = 'dashboardCtrl' > 
-     
-     <li ng-repeat = 'friend in friends'>{{friend.username}} </li>
+     <ul ng-controller = 'dashboardCtrl' >
+     <div ng-repeat = 'friend in friends'>
+                <md-card md-colors="::{backgroundColor: '{{theme}}-primary-700'}">
+            <md-card-title>
+              <md-card-title-media>
+                <div class="md-media-sm card-media" layout layout-align="center center"
+                     md-colors="::{background: '{{theme}}-accent'}">
+                  <md-icon md-svg-icon="person"></md-icon>
+                </div>
+              </md-card-title-media>
+              <md-card-title-text>
+                <span class="md-headline">{{friend.username}}</span>
+          <!--       <span class="md-subhead description">This card is colored according the {{theme}} theme</span> -->
+              </md-card-title-text>
+            </md-card-title>
+          </md-card>
+      </div>
+
 
       </ul>
-    
+
      </md-content>
    </md-sidenav>
 
@@ -55,7 +70,27 @@
   <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
     <ul>
-      <li ng-repeat="event in events.list | reverse" style = "list-style: none"> <span style = "font-weight: bold"> {{event.username}} wants to {{ event.eventname}} </span><span> {{event.timestamp.slice(11, 19)}} </span> <md-button  class="md-raised md-primary" ng-click = 'join(event.id, event.username)'>{{status}}</md-button></li>
+      <li ng-repeat="event in events.list | reverse" style = "list-style: none">
+        <span style = "font-weight: bold" > {{event.username}} wants to {{ event.eventname}} </span>
+        <span> {{event.timestamp.slice(11, 19)}} created by {{event.createdBy}}</span>
+
+        <md-button   ng-click="join(event.id, event.status)" class="md-warn md-raised md-hue-2"> {{event.status}}</md-button>
+
+<!--           <span>
+            <md-button class="md-warn md-raised md-hue-2"  ng-click="hiddenDiv = !hiddenDiv" ng-show="!hiddenDiv">hide</md-button>
+          </span> -->
+          <!-- <span ng-show="join">
+            <md-button ng-click="join()"  class="md-raised md-primary" >{{event.status}}</md-button>
+          </span>
+          <span ng-show="createdBy">
+            <md-button ng-click="join(event.id)"  class="md-raised md-primary" >{{event.status}}</md-button>
+          </span> -->
+
+
+        </li>
+
+
+
     </ul>
   </div>
   </div>
