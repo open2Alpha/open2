@@ -7,32 +7,20 @@ app.config(function($mdThemingProvider) {
     '200': 'FFBC4F',
     '300': 'FFBC4F',
     '400': 'FFBC4F',
-    '500': 'FFBC4F',
-    '600': 'e53935',
-    '700': 'd32f2f',
-    '800': 'c62828',
-    '900': 'b71c1c',
-    'A100': 'ff8a80',
-    'A200': 'ff5252',
-    'A400': 'ff1744',
-    'A700': 'd50000',
-    'contrastDefaultColor': 'light',
-    'contrastDarkColors': ['50', '100','200', '300', '400', 'A100'],
-    'contrastLightColors': undefined
+    '500': 'FFBC4F', //this is our bar color
+    '600': 'e53935', //mouse hover over NEW EVENT button color
+    '700': '7CFC00',
+    '800': '7CFC00',
+    '900': '7CFC00',
+    'A100': '7CFC00',
+    'A200': '7CFC00',
+    'A400': '7CFC00',
+    'A700': '7CFC00',
   });
   $mdThemingProvider.theme('default')
     .primaryPalette('Open2Pallete')
-    .backgroundPalette('grey')
-    .accentPalette('orange');
-  $mdThemingProvider.theme('d2')
-    .primaryPalette('Open2Pallete')
-    .backgroundPalette('grey')
-    .accentPalette('orange');
-  $mdThemingProvider.theme('d3')
-    .primaryPalette('Open2Pallete')
-    .backgroundPalette('grey')
-    .accentPalette('orange');
 });
+
 //route config
 app.config(function($routeProvider) {
   $routeProvider
@@ -51,14 +39,15 @@ app.config(function($routeProvider) {
   })
 });
 
+
 /// login controller
 app.controller('loginCtrl', function($scope, Services, $location) {
+  
+
   $scope.redirectSignup = function() {
     $location.path('/signup');
   };
 
-
-  // localStorage.setItem('username', $scope.username);
 
   $scope.submit = function() {
     var user = {
@@ -66,15 +55,17 @@ app.controller('loginCtrl', function($scope, Services, $location) {
       password: $scope.password
     };
 
-    localStorage.setItem('username', $scope.username);
-
-    // Services.username = $scope.username;
-    console.log("services username after login", Services.username);
-    Services.login(user);
+    //remember the current username to use later
+  localStorage.setItem('username', $scope.username);
+   
+   //login the user
+  Services.login(user);
   };
 
 });
 
+
+   // signup controller
 app.controller('signupCtrl', function($scope, Services) {
   $scope.submit = function() {
     var user = {
@@ -83,13 +74,11 @@ app.controller('signupCtrl', function($scope, Services) {
     };
     Services.signup(user);
   };
-
 });
 
 
 // dashboard controller
 app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route, $sce) {
-
   $scope.events = {};
 
   //// start uploading dashboard
@@ -99,6 +88,7 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
     var myEvents = [];
     var eventsToJoin = [];
 
+      //creating list of the events that current user attends or created himself
     data.forEach(function(item) {
       if(item.username===localStorage.getItem('username') && item.created_by === 0) {
         myEvents.push(
@@ -124,6 +114,8 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
        }
     });
 
+
+     //creating the list of events that are created by the user's friends, but aren't joined by the user
     data.forEach(function(item) {
      if (item.username!== localStorage.getItem('username') && item.created_by === 1) {
        eventsToJoin.push({
@@ -143,11 +135,13 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
 
 }); // end of .then
 
-///////////////////////////////////// end of uploading dashboard
+////////////////end of uploading dashboard
 
- // join/unjoin event
+ 
+ // join or unjoin event
 
  $scope.join = function(id, status) {
+     //join
   if(status === 'join') {
     var joinInfo = {
       'eventId': id,
@@ -156,34 +150,28 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
     Services.joinEvent(joinInfo);
     $route.reload();
   }
+   //unjoin
   else if(status === 'unjoin') {
-  // delete the event from database
-   console.log('unjoin me from this event', id)
-    Services.unjoinEvent(id);
-    console.log('sent the id', id)
+  
+  // delete the record about user's attendance from database
+   Services.unjoinEvent(id); // this doesn't work for come reason.
   }
-}
+
+};
 
 
-
-
-
-  Services.uploadFriendslist()
-  .then(function(data){
-    console.log("friendslist i got from server ", data.data)
+ Services.uploadFriendslist()
+ .then(function(data){
+    //console.log("friendslist i got from server ", data.data)
     $scope.friends = data.data;
-    console.log("friendslist to iterate", $scope.friends)
-  });
-
-
-
-
+    
+ });
 
 
   //this is our pop up dialog box
 
   $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-  $scope.showAdvanced = function(ev) {
+   $scope.showAdvanced = function(ev) {
     var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
     $mdDialog.show({
       controller: DialogController,
@@ -202,11 +190,12 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
   };
   //this the end of our pop up dialog box.
 
+ 
   $scope.time = {
     value: new Date(2016, 3, 9)
-  };
-  //end of our time selector
+  };  //end of our time selector
 
+ 
   $scope.click = function() {
     var eventInfo = {
       'event' : $scope.user.activity,
@@ -214,26 +203,20 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
       'username': localStorage.getItem('username')
     }
 
-    console.log("time", eventInfo);
-
-
+     
     Services.eventsPost(eventInfo)
     .then(function(respData){
-      console.log('i got this back from server/database', respData);
-      $route.reload();
-    })
-
+      //console.log('i got this back from server/database', respData);
+      $route.reload(); //
+    });
   };
 
 
-  //$scope.friends = {};
+}); ///////// end of dahboard controller
 
 
 
-
-
-});
-
+/// this reversed the order of the events displayed on dashboard
 app.filter('reverse', function() {
   return function(items) {
     return items.slice().reverse();
@@ -242,9 +225,12 @@ app.filter('reverse', function() {
 
 
 
+
+  /// factory for get/post requests
 app.factory('Services', function($http, $location) {
   var username;
 
+   // login
   var login = function(user) {
     console.log('services username inside signup', username);
     return $http({
@@ -261,9 +247,14 @@ app.factory('Services', function($http, $location) {
     })
   };
 
+  // logout
+
   var logout = function(){
     $location.path('/');
   };
+
+
+  // signup
 
   var signup = function(user) {
     return $http({
@@ -280,18 +271,19 @@ app.factory('Services', function($http, $location) {
     })
   };
 
+   // get the event info from database 
   var uploadDashboard = function() {
     return $http({
       method: 'GET',
       url: 'http://localhost:8080/dashboard/upload',
     })
     .then(function(resp){
-
-      console.log("data in uploadDashboard", resp.data)
+      //console.log("data in uploadDashboard", resp.data)
       return resp.data;
-
     });
   };
+
+
   //// Twillio notification
   var notify = function(sendText){
     return $http({
@@ -308,45 +300,44 @@ app.factory('Services', function($http, $location) {
     })
   };
 
+     
+     // new event request
   var eventsPost = function(eventInfo) {
-    console.log('eventinfo inside events post', eventInfo);
-
+    //console.log('eventinfo inside events post', eventInfo);
     return $http({
       method: 'POST',
       url: 'http://localhost:8080/dashboard/events',
       data: eventInfo
-
-    })
+    });
 
   };
 
+     // get freinds list
   var uploadFriendslist = function() {
     return $http ({
       method: 'GET',
       url: 'http://localhost:8080/dashboard/friends'
     });
+  };
 
-  }
 
+   // add a record to database when user joins an event
 var joinEvent = function(eventId) {
-
-    return $http({
+   return $http({
       method: 'POST',
       url: 'http://localhost:8080/dashboard/join',
       data: eventId
-
-      });
-
+    });
 };
 
-var unjoinEvent = function(userEventId) {
 
-     return $http({
+   //remove the record of user from database// this isn't handled in the backend 
+var unjoinEvent = function(userEventId) {
+    return $http({
        method: 'POST',
        url: 'http://localhost:8080/dashboard/unjoin',
        data: userEventId
-
-     });
+    });
 
 };
 
@@ -364,7 +355,12 @@ var unjoinEvent = function(userEventId) {
   };
 
 });
+/// end of Services
 
+
+
+
+  ///// controller handles styling
 
 app.controller('AppCtrl', function ($scope, $timeout, Services, $mdSidenav, $log) {
   $scope.toggleLeft = buildDelayedToggler('left');
