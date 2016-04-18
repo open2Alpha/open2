@@ -175,6 +175,16 @@ float: right;
   }
 }
 
+.friendsNames{
+  color: #ffa500;
+  font-size: 30px;
+}
+
+.friendsNames:hover{
+  background-color: lightblue;
+  opacity: 0.4;
+}
+
 .dialogdemoBasicUsage #popupContainer {
   position: relative; }
 .dialogdemoBasicUsage .footer {
