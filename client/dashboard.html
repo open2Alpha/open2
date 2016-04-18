@@ -3,7 +3,7 @@
   <md-toolbar>
     <div class="md-toolbar-tools">
 
-      <h1 style="font-size: 30px; font-weight: bold;" class = "open" ng-click="toggleLeft()"> Open2</h2>
+      <h1 sty`le="font-size: 30px; font-weight: bold;" class = "open" ng-click="toggleLeft()"> Open2</h2>
       <span flex></span>
 
       <md-button class="md-warn md-raised md-hue-2" ng-click="logout()">logout</md-button>
@@ -12,15 +12,28 @@
 </div>
 <!-- nav bar end -->
 
-    <!-- friends list -->
- <section layout="row" flex>
-   <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-disable-backdrop md-whiteframe="4">
-     <md-toolbar class="md-theme-indigo" ng-controller="LeftCtrl">
-       <h3 class= "open" ng-click="close()" >my friends</h1>
-     </md-toolbar>
-     <md-content layout-padding ng-controller="LeftCtrl">
-     <ul ng-controller = 'dashboardCtrl' >
-     <div ng-repeat = 'friend in friends'>
+<!-- friends list -->
+<section layout="row" flex>
+  <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-disable-backdrop md-whiteframe="4">
+    <md-toolbar class="md-theme-indigo" ng-controller="LeftCtrl">
+      <h3 class= "open" ng-click="close()" >my friends</h1>
+      </md-toolbar>
+      <md-content layout-padding ng-controller="LeftCtrl">
+        <ul ng-controller = 'dashboardCtrl' >
+          <table class="centered striped bordered">
+            <thead>
+              <th data-field="id" class="friendsTitle">Friends</th>
+            </thead>
+            <tbody>
+              <tr ng-repeat='friend in friends'>
+                <td class="friendsNames">{{friend.username}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+
+
+     <!-- <div ng-repeat = 'friend in friends'>
                 <md-card md-colors="::{backgroundColor: '{{theme}}-primary-700'}">
             <md-card-title>
               <md-card-title-media>
@@ -30,12 +43,12 @@
                 </div>
               </md-card-title-media>
               <md-card-title-text>
-                <span class="md-headline">{{friend.username}}</span>
+                <span class="md-headline">{{friend.username}}</span> -->
           <!--       <span class="md-subhead description">This card is colored according the {{theme}} theme</span> -->
-              </md-card-title-text>
+              <!-- </md-card-title-text>
             </md-card-title>
           </md-card>
-      </div>
+      </div> -->
 
 
       </ul>
