@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var fs = require('fs');
 var dbconfig = require('./dbconfig');
+var bcrypt = require('bcrypt');
 
 var db = mysql.createConnection({
 	host: dbconfig.host,
@@ -17,21 +18,21 @@ db.on('error', function(){
 
 // Initial DB Setup when Server starts
 fs.readFile(__dirname + '/schema.sql', 'utf-8', function(err, data){
-  if (err) {
-    console.error(err);
-  } else {
-    data = data.split(";"); // Multiple statement work-around
-    data.pop();
-    data.forEach(function(item){
-      db.query(item, function(err, results, fields){
-        if (err) {
-          console.error(err);
-        } else {
-          console.log('SQL Setup');
-        }
-      });
-    });
-  }
+	if (err) {
+		console.error(err);
+	} else {
+		data = data.split(";"); // Multiple statement work-around
+		data.pop();
+		data.forEach(function(item){
+			db.query(item, function(err, results, fields){
+				if (err) {
+					console.error(err);
+				} else {
+					console.log('SQL Setup');
+				}
+			});
+		});
+	}
 });
 
 setInterval(function(){
