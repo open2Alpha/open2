@@ -3,27 +3,28 @@
   <form>
     <md-toolbar>
 
-        <h2 style='text-align: center'>What do I want to do?</h2>
+        <h2 class = "open" style='text-align: center; color: red;'>What do I want to do?</h2>
 
     </md-toolbar>
     <md-dialog-content>
       <div class="md-dialog-content">
-        <h2>Let me see...</h2>
+        <!-- <h2 class = "font">Let me see...</h2> -->
         <!-- date -->
+
      <form name="myForm">
 
           <!-- <h4>pick date</h4> -->
           <!-- <md-datepicker ng-model="myDate" md-placeholder="Enter date"></md-datepicker> -->
 
-       <h4>pick time</h4>
-       <input type="time" id="timeInput" name="input" ng-model="time.value"/>
+
 
         <div layout="column" layout-padding ng-cloak>
           <br/>
-
+       <label class = "font">pick time</label>
+       <input type="time" id="timeInput" name="input" ng-model="time.value"/>
 
             <md-input-container class="md-icon-float md-block">
-              <label>What to do?</label>
+              <label class = "font">I want to...</label>
               <input  ng-model="user.activity" type="text">
 
           </md-content>

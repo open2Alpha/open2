@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Vibur);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -10,17 +11,28 @@ body {
   background: #FF9000;
 
 }
+.bodyColor2 {
+  background:   #E86F42;
+}
 .open {
-  color: #ccc;
+  color: #FF4300;
   text-align: center;
   font-family: 'Vibur', cursive;
   font-size: 40px;
 
+}
+/*.md-button {}*/
+
+.font {
+  font-family: 'Open Sans';
 
 }
-
+.dashQuestion {
+  font-family: 'Open Sans';
+  font-size: 30px;
+}
 h1 {
-  color: #ccc;
+  color:  #FF4500;
   text-align: center;
   font-family: 'Vibur', cursive;
   font-size: 50px;
@@ -32,21 +44,26 @@ float: right;
 
 }
 #eventsIgoTo {
-
-   width: 520px;
-  
+  width : 48%;
    border: 1px solid black;
 
   float: right;
+ padding: 30px;
+
 
 }
 
-#eventsList {
-
- width: 520px;
+/*#eventsList {
 
   border: 1px solid black;
   float: left;
+}
+*/
+#eventsList {
+  width : 48%;
+  border: 1px solid black;
+  float: left;
+  padding: 30px;
 }
 
 .login-form {

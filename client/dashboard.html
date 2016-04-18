@@ -1,9 +1,10 @@
 <!--- nav bar start -->
+<div class = "bodyColor2">
 <div ng-controller="AppCtrl" layout="column" style="height:70px;" ng-cloak>
   <md-toolbar>
     <div class="md-toolbar-tools">
 
-      <h1 sty`le="font-size: 30px; font-weight: bold;" class = "open" ng-click="toggleLeft()"> Open2</h2>
+      <h1 style="font-size: 30px; font-weight: bold;" class = "open" ng-click="toggleLeft()"> Open2</h2>
       <span flex></span>
 
       <md-button class="md-warn md-raised md-hue-2" ng-click="logout()">logout</md-button>
@@ -12,43 +13,30 @@
 </div>
 <!-- nav bar end -->
 
-<!-- friends list -->
-<section layout="row" flex>
-  <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-disable-backdrop md-whiteframe="4">
-    <md-toolbar class="md-theme-indigo" ng-controller="LeftCtrl">
-      <h3 class= "open" ng-click="close()" >my friends</h1>
-      </md-toolbar>
-      <md-content layout-padding ng-controller="LeftCtrl">
-        <ul ng-controller = 'dashboardCtrl' >
-          <table class="centered striped bordered">
-            <thead>
-              <th data-field="id" class="friendsTitle">Friends</th>
-            </thead>
-            <tbody>
-              <tr ng-repeat='friend in friends'>
-                <td class="friendsNames">{{friend.username}}</td>
-              </tr>
-            </tbody>
-          </table>
+    <!-- friends list -->
+ <section layout="row" flex>
+   <md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" md-disable-backdrop md-whiteframe="4">
+     <md-toolbar class="md-theme-indigo" ng-controller="LeftCtrl">
+       <h3 class= "open" ng-click="close()" >my friends</h3>
+     </md-toolbar>
+     <md-content layout-padding ng-controller="LeftCtrl">
+     <ul ng-controller = 'dashboardCtrl' >
+     <div ng-repeat = 'friend in friends'>
 
-
-
-     <!-- <div ng-repeat = 'friend in friends'>
-                <md-card md-colors="::{backgroundColor: '{{theme}}-primary-700'}">
-            <md-card-title>
+<!--             <md-card-title>
               <md-card-title-media>
                 <div class="md-media-sm card-media" layout layout-align="center center"
                      md-colors="::{background: '{{theme}}-accent'}">
-                  <md-icon md-svg-icon="person"></md-icon>
-                </div>
+
+                </div> -->
               </md-card-title-media>
               <md-card-title-text>
-                <span class="md-headline">{{friend.username}}</span> -->
+                <img src="http://portal.stickntrack.com/images/profile.jpg" alt="Mountain View" style="width:50px;height:50px;"><span class="md-headline font">{{friend.username}}</span>
           <!--       <span class="md-subhead description">This card is colored according the {{theme}} theme</span> -->
-              <!-- </md-card-title-text>
+              </md-card-title-text>
             </md-card-title>
           </md-card>
-      </div> -->
+      </div>
 
 
       </ul>
@@ -62,7 +50,7 @@
 
 <!-- button start -->
 <div ng-controller="dashboardCtrl" class="md-padding" id="popupContainer" ng-cloak>
-  <p class="inset"> Ask my friends if they are open 2? </p>
+  <p class="inset dashQuestion"> Ask my friends if they are open 2? </p>
 
   <div class="dialog-demo-content" layout="row" layout-wrap layout-margin layout-align="center">
 
@@ -82,25 +70,25 @@
 
   <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
-  
-    <ul id = 'eventsList'>
-    <h2> new events </h2>
+
+    <ul flex id = 'eventsList' class = 'font'>
+    <h4 class = 'font'> New Events </h4>
       <li ng-repeat="event in events.list | reverse" style = "list-style: none">
-        <span style = "font-weight: bold" > {{event.username}} wants to {{ event.eventname}} </span>
+        <span style = "font-weight: bold" class = 'font' > {{event.username}} wants to {{ event.eventname}} </span>
         <span> {{event.timestamp.slice(11, 19)}}</span>
 
-        <md-button   ng-click="join(event.id, event.status)" class="md-warn md-raised md-hue-2"> {{event.status}} </md-button>
+        <md-button   ng-click="join(event.id, event.status)" class="md-warn md-raised md-hue-2" class = 'font'> {{event.status}} </md-button>
        </li>
 
 </ul>
- 
- <ul id = 'eventsIgoTo'>
- <h2>events I attend </h2>
+
+ <ul flex id = 'eventsIgoTo'>
+ <h4 class = 'font'> Attending! </h4>
       <li ng-repeat="event in events.eventsIgoTo | reverse" style = "list-style: none">
-        <span style = "font-weight: bold" > I want to {{ event.eventname}} </span>
+        <span style = "font-weight: bold" class = 'font' > I want to {{ event.eventname}} </span>
         <span> {{event.timestamp.slice(11, 19)}}  </span>
 
-        <md-button   ng-click="join(event.id, event.status)" class="md-warn md-raised md-hue-2"> {{event.status}}</md-button>
+        <md-button   ng-click="join(event.id, event.status)" class="md-warn md-raised md-hue-2 font"> {{event.status}}</md-button>
        </li>
 
 </ul>
@@ -116,3 +104,4 @@
    </md-content>
 
  </section>
+ </div>
