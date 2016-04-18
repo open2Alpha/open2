@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../db.js');
 var bodyParser = require('body-parser');
 var twilio = require('twilio')('AC40691c0816f7dd360b043b23331f4f43','89f0d01b69bb6bcc473724b5b232b6f4');
+var bcrypt = require('bcrypt');
 
 var app = express();
 

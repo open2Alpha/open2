@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var fs = require('fs');
 var dbconfig = require('./dbconfig');
+var bcrypt = require('bcrypt');
 
 var db = mysql.createConnection({
 	host: dbconfig.host,
