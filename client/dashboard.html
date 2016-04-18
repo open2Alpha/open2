@@ -61,7 +61,7 @@
 </div>
 
      <!-- notification Box -->
-<div ng-controller="SubheaderAppCtrl" layout="column" flex layout-fill ng-cloak>
+<div id = 'eventContainer' ng-controller="SubheaderAppCtrl" layout="column" flex layout-fill ng-cloak>
   <md-toolbar>
     <div class="md-toolbar-tools open" style="font-size: 30px;">my events</div>
   </md-toolbar>
@@ -69,29 +69,29 @@
 
   <div ng-controller='dashboardCtrl'>
   <div ng-if='events.fetch'>
-    <ul>
+  
+    <ul id = 'eventsList'>
+    <h2> new events </h2>
       <li ng-repeat="event in events.list | reverse" style = "list-style: none">
         <span style = "font-weight: bold" > {{event.username}} wants to {{ event.eventname}} </span>
-        <span> {{event.timestamp.slice(11, 19)}} created by {{event.createdBy}}</span>
+        <span> {{event.timestamp.slice(11, 19)}}</span>
+
+        <md-button   ng-click="join(event.id, event.status)" class="md-warn md-raised md-hue-2"> {{event.status}} </md-button>
+       </li>
+
+</ul>
+ 
+ <ul id = 'eventsIgoTo'>
+ <h2>events I attend </h2>
+      <li ng-repeat="event in events.eventsIgoTo | reverse" style = "list-style: none">
+        <span style = "font-weight: bold" > I want to {{ event.eventname}} </span>
+        <span> {{event.timestamp.slice(11, 19)}}  </span>
 
         <md-button   ng-click="join(event.id, event.status)" class="md-warn md-raised md-hue-2"> {{event.status}}</md-button>
+       </li>
 
-<!--           <span>
-            <md-button class="md-warn md-raised md-hue-2"  ng-click="hiddenDiv = !hiddenDiv" ng-show="!hiddenDiv">hide</md-button>
-          </span> -->
-          <!-- <span ng-show="join">
-            <md-button ng-click="join()"  class="md-raised md-primary" >{{event.status}}</md-button>
-          </span>
-          <span ng-show="createdBy">
-            <md-button ng-click="join(event.id)"  class="md-raised md-primary" >{{event.status}}</md-button>
-          </span> -->
+</ul>
 
-
-        </li>
-
-
-
-    </ul>
   </div>
   </div>
   </md-content>

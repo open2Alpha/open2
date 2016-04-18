@@ -78,74 +78,28 @@ app.controller('signupCtrl', function($scope, Services) {
 app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route, $sce) {
 
   $scope.events = {};
-
-
+  
+  //// start uploading dashboard
   Services.uploadDashboard()
   .then(function(data){
     $scope.events.fetch = true;
-
-   // for(var i = 0; i<data.length; i++) {
-
-   //   if(data[i].created_by === 1 && data[i].username === localStorage.getItem('username')) {
-   //      $scope.hiddenDiv = 2;
-
-   //   }
-   //   else if (data[i].created_by === undefined && data[i].username!==localStorage.getItem('username')) {
-   //      $scope.hiddenDiv = 0;
-
-   //   }
-   //   else if (data[i].created_by === 0 && data[i].username === localStorage.getItem('username')) {
-   //    $scope.hiddenDiv = 1;
-   //   }
-   // }
-    var dataTodisplay = [];
-   data.forEach(function(item) {
-
+    var myEvents = [];
+    var eventsToJoin = [];
+    
+    data.forEach(function(item) {
       if(item.username===localStorage.getItem('username') && item.created_by === 0) {
-        // $scope.join = false;
-        // $scope.unjoin = true;
-        // $scope.createdBy = false;
-
-
-        dataTodisplay.push(
+        myEvents.push(
          {
           'eventname': item.eventname,
           'id': item.id,
           'timestamp': item.timestamp,
           'username': item.username,
           'createdBy': item.created_by,
-          // 'status': $sce.trustAsHtml('<md-button class="md-warn md-raised md-hue-2" ng-click="join(event.id)">fsadsf {{event.status}}</md-button>')
           'status': 'unjoin'
-
-         } );
-
-
-
+        });
       }
-      else if (item.username!== localStorage.getItem('username') && item.created_by === 1) {
-
-
-
-          dataTodisplay.push({
-          'eventname': item.eventname,
-          'id': item.id,
-          'timestamp': item.timestamp,
-          'username': item.username,
-          'createdBy': item.created_by,
-          // 'status': $sce.trustAsHtml('<md-button class="md-warn md-raised md-hue-2" ng-click="join(event.id)">fsadsf {{event.status}}</md-button>')
-          'status': 'join'
-
-          });
-
-
-
-        }
       else if (item.username=== localStorage.getItem('username') && item.created_by ===1 ) {
-          // $scope.join = false;
-          // $scope.unjoin = true;
-          // $scope.createdBy = true;
-
-        dataTodisplay.push({
+        myEvents.push({
           'eventname': item.eventname,
           'id': item.id,
           'timestamp': item.timestamp,
@@ -153,17 +107,51 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
           'createdBy': item.created_by,
           'status': 'created by me'
 
-          });
+        });
+       }
+    }); 
+
+    data.forEach(function(item) {
+     if (item.username!== localStorage.getItem('username') && item.created_by === 1) {
+       eventsToJoin.push({
+        'eventname': item.eventname,
+        'id': item.id,
+        'timestamp': item.timestamp,
+        'username': item.username,
+        'createdBy': item.created_by,
+        'status': 'join'
+      });
+      }
+    });
+
+  $scope.events.list = eventsToJoin;
+  $scope.events.eventsIgoTo = myEvents;  
+    
+
+}); // end of .then
+
+///////////////////////////////////// end of uploading dashboard
+
+ // join/unjoin event 
+
+ $scope.join = function(id, status) {
+  if(status === 'join') {
+    var joinInfo = {
+      'eventId': id,
+      'user': localStorage.getItem('username')
+    };
+    Services.joinEvent(joinInfo);
+    $route.reload();
+  }
+  else if(status === 'unjoin') {
+  // delete the event from database
+   console.log('unjoin me from this event', id)
+    Services.unjoinEvent(id);
+    console.log('sent the id', id)
+  }
 }
 
 
-})
-
-  $scope.events.list = dataTodisplay;
-    console.log("This is data from upload Dash", data);
-
-
-  });
 
 
 
@@ -174,33 +162,7 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
     console.log("friendslist to iterate", $scope.friends)
   });
 
-   $scope.join = function(id, status) {
 
-       if(status === 'join') {
-
-      var joinInfo = {
-      'eventId': id,
-      'user': localStorage.getItem('username')
-      };
-
-      Services.joinEvent(joinInfo);
-
-
-
-
-       $route.reload();
-    }
-
-    else if(status === 'unjoin') {
-    // delete the event from database
-    console.log('unjoin me from this event', id)
-       Services.unjoinEvent(id);
-
-       $route.reload();
-
-    }
-
-  }
 
 
 
@@ -384,7 +346,8 @@ var unjoinEvent = function(userEventId) {
     logout: logout,
     username: username,
     uploadFriendslist: uploadFriendslist,
-    joinEvent: joinEvent
+    joinEvent: joinEvent,
+    unjoinEvent: unjoinEvent
   };
 
 });

@@ -8,12 +8,14 @@
 
 body {
   background: #FF9000;
+
 }
 .open {
   color: #ccc;
   text-align: center;
   font-family: 'Vibur', cursive;
   font-size: 40px;
+
 
 }
 
@@ -22,6 +24,29 @@ h1 {
   text-align: center;
   font-family: 'Vibur', cursive;
   font-size: 50px;
+}
+
+#eventContainer {
+position: relative;
+float: right;
+
+}
+#eventsIgoTo {
+
+   width: 520px;
+  
+   border: 1px solid black;
+
+  float: right;
+
+}
+
+#eventsList {
+
+ width: 520px;
+
+  border: 1px solid black;
+  float: left;
 }
 
 .login-form {
