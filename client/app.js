@@ -1,24 +1,37 @@
 
 var app = angular.module('myApp', ['ngMaterial', 'ngRoute', 'ngMessages']);
 app.config(function($mdThemingProvider) {
-  $mdThemingProvider.definePalette('Open2', {
-    '50': '#ffffff',
-    '100': '#ffdebd',
-    '200': '#ffc285',
-    '300': '#ff9e3d',
-    '400': '#ff8f1f',
-    '500': '#ff8000',
-    '600': '#e07100',
-    '700': '#c26100',
-    '800': '#a35200',
-    '900': '#854300',
-    'A100': '#ffffff',
-    'A200': '#ffdebd',
-    'A400': '#ff8f1f',
-    'A700': '#c26100',
+  $mdThemingProvider.definePalette('Open2Pallete', {
+    '50': 'FFBC4F',
+    '100': 'FFBC4F',
+    '200': 'FFBC4F',
+    '300': 'FFBC4F',
+    '400': 'FFBC4F',
+    '500': 'FFBC4F',
+    '600': 'e53935',
+    '700': 'd32f2f',
+    '800': 'c62828',
+    '900': 'b71c1c',
+    'A100': 'ff8a80',
+    'A200': 'ff5252',
+    'A400': 'ff1744',
+    'A700': 'd50000',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 300 400 500 600 A100 A200 A400'
+    'contrastDarkColors': ['50', '100','200', '300', '400', 'A100'],
+    'contrastLightColors': undefined
   });
+  $mdThemingProvider.theme('default')
+    .primaryPalette('Open2Pallete')
+    .backgroundPalette('grey')
+    .accentPalette('orange');
+  $mdThemingProvider.theme('d2')
+    .primaryPalette('Open2Pallete')
+    .backgroundPalette('grey')
+    .accentPalette('orange');
+  $mdThemingProvider.theme('d3')
+    .primaryPalette('Open2Pallete')
+    .backgroundPalette('grey')
+    .accentPalette('orange');
 });
 //route config
 app.config(function($routeProvider) {
@@ -78,14 +91,14 @@ app.controller('signupCtrl', function($scope, Services) {
 app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $route, $sce) {
 
   $scope.events = {};
-  
+
   //// start uploading dashboard
   Services.uploadDashboard()
   .then(function(data){
     $scope.events.fetch = true;
     var myEvents = [];
     var eventsToJoin = [];
-    
+
     data.forEach(function(item) {
       if(item.username===localStorage.getItem('username') && item.created_by === 0) {
         myEvents.push(
@@ -109,7 +122,7 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
 
         });
        }
-    }); 
+    });
 
     data.forEach(function(item) {
      if (item.username!== localStorage.getItem('username') && item.created_by === 1) {
@@ -125,14 +138,14 @@ app.controller('dashboardCtrl', function($scope, Services,$mdDialog, $mdMedia, $
     });
 
   $scope.events.list = eventsToJoin;
-  $scope.events.eventsIgoTo = myEvents;  
-    
+  $scope.events.eventsIgoTo = myEvents;
+
 
 }); // end of .then
 
 ///////////////////////////////////// end of uploading dashboard
 
- // join/unjoin event 
+ // join/unjoin event
 
  $scope.join = function(id, status) {
   if(status === 'join') {
